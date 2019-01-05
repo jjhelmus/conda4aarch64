@@ -1,0 +1,47 @@
+# in compiler CBC.yaml
+build_num:
+  - 0
+ctng_gcc_build_num:
+  - 0
+ctng_sample:
+  - aarch64-unknown-linux-gnu
+ctng_cpu_arch:
+  - aarch64
+gnu:
+  - 2.17
+ctng_kernel:
+  - 3.10
+ctng_gdb:
+  - 7.12.1
+ctng_target_platform:
+  - linux-aarch64
+ctng_vendor:
+  - conda_cos7
+ctng_binutils:
+  - 2.29.1
+ctng_duma:
+  - 2.5.15
+ctng_gcc:
+  - 7.3.0
+ctng_gmp:
+  - 6.1.2
+ctng_isl:
+  - 0.19
+ctng_libc:
+  - gnu
+ctng_libiconv:
+  - 1.15
+ctng_mpc:
+  - 1
+ctng_nature:
+  - shared
+ctng_ncurses:
+  - 6.1
+ctng_mpfr:
+  - 3.1.5
+ctng_gettext:
+  - 0.19.7
+zip_keys:
+  -
+    - ctng_target_platform
+    - ctng_cpu_arch
