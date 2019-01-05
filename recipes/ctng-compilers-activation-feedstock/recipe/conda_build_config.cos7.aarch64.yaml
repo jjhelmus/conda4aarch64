@@ -1,0 +1,31 @@
+# cos7-specific because of PYTHON_SYSCONFIGDATA_NAME below.  Would be nice to make that more generic if possible.
+ctng_target_platform:
+  - linux-aarch64
+FINAL_CPPFLAGS:
+  - -DNDEBUG -D_FORTIFY_SOURCE=2 -O3
+FINAL_CFLAGS:
+  - -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O3 -pipe
+FINAL_CXXFLAGS:
+  - -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O3 -pipe
+FINAL_FFLAGS:
+  - -fopenmp -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O3 -pipe
+FINAL_LDFLAGS:
+  - -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now
+FINAL_DEBUG_CPPFLAGS:
+- -D_DEBUG -D_FORTIFY_SOURCE=2 -Og
+FINAL_DEBUG_CFLAGS:
+  - -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fvar-tracking-assignments -pipe
+FINAL_DEBUG_CXXFLAGS:
+  - -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-all -fno-plt -Og -g -Wall -Wextra -fvar-tracking-assignments -pipe
+FINAL_DEBUG_FFLAGS:
+  - -fopenmp -ftree-vectorize -fPIC -fstack-protector-strong -pipe -Og -g -Wall -Wextra -fcheck=all -fbacktrace -fvar-tracking-assignments -pipe
+FINAL_CONDA_PYTHON_SYSCONFIGDATA_NAME:
+  - _sysconfigdata_aarch64_conda_cos7_linux_gnu
+ctng_target_platform:
+  - linux-aarch64
+ctng_gcc:
+  - 7.3.0
+ctng_binutils:
+  - 2.29.1
+ctng_gcc_activation_build_num:
+  - 0
