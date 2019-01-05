@@ -1,0 +1,44 @@
+From 1a5abb77dc02648501a0879a228dd005254ef1f0 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Tue, 27 Jun 2017 09:22:22 +0100
+Subject: [PATCH 4/4] Add use lib '.'; to auto{scan,header}.in
+
+Perl 5.25.11 removed this.
+---
+ bin/autoheader.in | 4 ++++
+ bin/autoscan.in   | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/bin/autoheader.in b/bin/autoheader.in
+index 5513e4a3..021dfba4 100644
+--- a/bin/autoheader.in
++++ b/bin/autoheader.in
+@@ -45,6 +45,10 @@ use Autom4te::FileUtils;
+ use Autom4te::General;
+ use Autom4te::XFile;
+ use strict;
++# Since Perl 5.25.11, '.' is no longer in @INC
++# http://www.mail-archive.com/bug-autoconf@gnu.org/msg04181.html
++# https://wiki.gentoo.org/wiki/Project:Perl/Dot-In-INC-Removal
++use lib '.';
+ 
+ # Using `do FILE', we need `local' vars.
+ use vars qw ($config_h %verbatim %symbol);
+diff --git a/bin/autoscan.in b/bin/autoscan.in
+index a72c7471..6242a6eb 100644
+--- a/bin/autoscan.in
++++ b/bin/autoscan.in
+@@ -43,6 +43,10 @@ use Autom4te::XFile;
+ use File::Basename;
+ use File::Find;
+ use strict;
++# Since Perl 5.25.11, '.' is no longer in @INC
++# http://www.mail-archive.com/bug-autoconf@gnu.org/msg04181.html
++# https://wiki.gentoo.org/wiki/Project:Perl/Dot-In-INC-Removal
++use lib '.';
+ 
+ use vars qw(@cfiles @makefiles @shfiles @subdirs %printed);
+ 
+-- 
+2.13.0
+

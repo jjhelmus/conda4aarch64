@@ -1,0 +1,61 @@
+{% set version = "2.69" %}
+
+package:
+  name: autoconf
+  version: {{ version }}
+
+source:
+  # Please keep these lines around. They are used to rebase the patches
+  # easily. Unfortunately, autoconf requires autotools to build itself.
+  # git_url: http://git.sv.gnu.org/r/autoconf.git
+  # git_tag: v2.69
+  url: http://ftp.gnu.org/gnu/autoconf/autoconf-{{ version }}.tar.gz
+  sha256: 954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969
+  patches:
+    - 0001-autoscan-port-to-perl-5.17.patch
+    - 0002-tests-avoid-spurious-test-failure-with-libtool-2.4.3.patch
+    - 0003-Patch-shebang.patch
+    - 0004-Add-use-lib-.-to-auto-scan-header-.in.patch
+
+build:
+  number: 5
+  skip: True  # [win]
+
+requirements:
+  host:
+    - m4
+    - perl
+    - make
+    #  make check requirement:
+    - {{ compiler('c') }}
+  build:
+    #  make check requirement:
+    - libtool
+  run:
+    - m4
+    - perl
+
+test:
+  commands:
+    - autoconf --help
+    - conda inspect linkages -p $PREFIX autoconf  # [not win]
+    - conda inspect objects -p $PREFIX autoconf   # [osx]
+
+about:
+  home: http://www.gnu.org/software/autoconf/
+  license: GPL-3.0
+  license_file: COPYING
+  summary: 'Extensible M4 macros that produce shell scripts to configure software source code packages.'
+  description: |
+    Autoconf is a tool for producing shell scripts that automatically configure
+    software source code packages to adapt to many kinds of Posix-like systems.
+    The configuration scripts produced by Autoconf are independent of Autoconf
+    when they are run, so their users do not need to have Autoconf.
+  doc_url: https://www.gnu.org/software/autoconf/manual/autoconf.html
+  dev_url: http://git.sv.gnu.org/r/autoconf.git
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - ocefpaf
+    - mingwandroid
