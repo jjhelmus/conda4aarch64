@@ -1,0 +1,41 @@
+{% set version = "2018.03.07" %}
+
+package:
+  name: ca-certificates
+  version: {{ version }}
+
+source:
+  # updates and sha256 published at: https://curl.haxx.se/docs/caextract.html
+  fn: cacert.pem
+  url: https://curl.haxx.se/ca/cacert-2018-03-07.pem
+  sha256: 79ea479e9f329de7075c40154c591b51eb056d458bc4dff76d9a4b9c6c4f6d0b
+
+build:
+  commands:
+    # Verify the certificates are there.
+    - test -f "${PREFIX}/ssl/cacert.pem"                                      # [unix]
+    - test -f "${PREFIX}/ssl/cert.pem"                                        # [unix]
+    - if not exist %LIBRARY_PREFIX%\\ssl\\cacert.pem exit 1                   # [win]
+    - if not exist %LIBRARY_PREFIX%\\ssl\\cert.pem exit 1                     # [win]
+
+    # Use the certificates to download something.
+    - /usr/bin/openssl -CAfile "${PREFIX}/ssl/cacert.pem" -CApath nosuchdir s_client -showcerts -connect www.google.com:443  # [unix]
+
+    - /usr/bin/curl --cacert "${PREFIX}/ssl/cacert.pem" https://www.google.com         # [unix]
+    - /usr/bin/curl --cacert %LIBRARY_PREFIX%\\ssl\\cacert.pem https://www.google.com  # [win]
+
+about:
+  home: https://github.com/conda-forge/ca-certificates-feedstock
+  license: ISC
+  summary: Certificates for use with other packages.
+
+extra:
+  recipe-maintainers:
+     - jakirkham
+     - jjhelmus
+     - msarahan
+     - mwcraig
+     - ocefpaf
+     - patricksnape
+     - pelson
+     - scopatz
