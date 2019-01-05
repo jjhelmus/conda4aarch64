@@ -1,0 +1,58 @@
+{% set name="openssl" %}
+{% set version="1.0.2p" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: http://www.openssl.org/source/{{ name }}-{{ version }}.tar.gz
+  sha256: 50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00
+  patches:
+    - 0001-win32-Fix-yasm-compatibility.patch
+
+build:
+  number: 0
+  no_link: lib/libcrypto.so.1.0.0        # [linux]
+  no_link: lib/libcrypto.1.0.0.dylib     # [osx]
+  has_prefix_files:                      # [unix]
+    - bin/c_rehash                       # [unix]
+    - include/openssl/opensslconf.h      # [unix]
+    - lib/pkgconfig/libcrypto.pc         # [unix]
+    - lib/pkgconfig/libssl.pc            # [unix]
+    - lib/pkgconfig/openssl.pc           # [unix]
+  run_exports:
+    - {{ pin_subpackage('openssl', max_pin='x.x.x') }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - yasm               # [win32]
+    - perl
+    - make               # [unix]
+  run:
+    - ca-certificates
+
+test:
+  commands:
+    - copy NUL checksum.txt        # [win]
+    - touch checksum.txt           # [unix]
+    - openssl sha256 checksum.txt
+
+about:
+  home: http://www.openssl.org/
+  license_file: LICENSE
+  license: OpenSSL
+  license_family: Apache
+  summary: OpenSSL is an open-source implementation of the SSL and TLS protocols
+  dev_url: https://github.com/openssl/openssl
+  doc_url: https://www.openssl.org/docs/man1.0.2/
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - jjhelmus
+    - msarahan
+    - ocefpaf
+    - pelson
