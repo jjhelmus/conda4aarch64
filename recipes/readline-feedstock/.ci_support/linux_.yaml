@@ -1,0 +1,7 @@
+c_compiler:
+- toolchain_c
+ncurses:
+- '6.1'
+pin_run_as_build:
+  ncurses:
+    max_pin: x.x
