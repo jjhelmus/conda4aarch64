@@ -1,0 +1,54 @@
+{% set name = "rhash" %}
+{% set version = "1.3.6" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://github.com/rhash/RHash/archive/v{{ version }}.tar.gz
+  sha256: 964df972b60569b5cb35ec989ced195ab8ea514fc46a74eab98e86569ffbcf92
+
+build:
+  number: 0
+  skip: true  # [win]
+  run_exports:
+    # https://abi-laboratory.pro/tracker/timeline/rhash/
+    # Backwards compat was broken in the early versions b/w patch releases,
+    # but seems to be stable since the past 6 years. Go for default pinning.
+    - {{ pin_subpackage('rhash') }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - make                 # [unix]
+  host:
+    - openssl
+
+test:
+  source_files:
+    - tests
+
+  commands:
+    - test -f "$PREFIX/include/rhash.h"
+    - test -f "$PREFIX/lib/librhash.a"  # [unix]
+    - test -f "$PREFIX/lib/librhash.so.0"  # [linux]
+    - test -f "$PREFIX/lib/librhash.0.dylib"  # [osx]
+    - rhash --version
+    - tests/test_rhash.sh  # [unix]
+
+about:
+  home: http://rhash.anz.ru/
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: 'Great utility for computing hash sums'
+  description: |
+    RHash is a console utility for computing and verifying hash sums of files. It supports CRC32, MD4, MD5, SHA1, SHA256, SHA512, SHA3, Tiger, TTH, Torrent BTIH, AICH, ED2K, GOST R 34.11-94, RIPEMD-160, HAS-160, EDON-R 256/512, WHIRLPOOL and SNEFRU hash sums.
+  doc_url: http://rhash.anz.ru/manpage.php
+  dev_url: https://github.com/rhash/RHash
+
+extra:
+  recipe-maintainers:
+    - xantares
