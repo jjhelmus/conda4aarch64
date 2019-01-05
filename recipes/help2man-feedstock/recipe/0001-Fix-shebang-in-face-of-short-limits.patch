@@ -1,0 +1,13 @@
+diff -urN help2man-1.47.6.orig/help2man.PL help2man-1.47.6/help2man.PL
+--- help2man-1.47.6.orig/help2man.PL	2018-05-25 23:56:17.691245211 +0000
++++ help2man-1.47.6/help2man.PL	2018-05-25 23:56:56.753443778 +0000
+@@ -47,7 +47,8 @@
+     unless $opts{quiet};
+ 
+ # Add startup header.
+-print OUT "$Config{startperl} -w\n";
++# print OUT "$Config{startperl} -w\n";
++print OUT "#!/usr/bin/env perl\n";
+ 
+ # For systems without the crash-bang hack also add:
+ print OUT <<"!GROK!THIS!" if $Config{sharpbang} !~ /^#!/;

@@ -1,0 +1,43 @@
+{% set name = "help2man" %}
+{% set version = "1.47.7" %}
+{% set sha256 = "585b8e88ed04bdb426403cf7d9b0c0bb9c7630755b0096c2b018a024b29bec0d" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.xz
+  url: https://ftp.gnu.org/gnu/{{ name }}/{{name}}-{{ version }}.tar.xz
+  sha256: {{ sha256 }}
+  patches:
+    - 0001-Fix-shebang-in-face-of-short-limits.patch
+
+build:
+  number: 0
+  skip: True  # [win]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - make
+  host:
+    - perl
+  run:
+    - perl
+
+test:
+  commands:
+    - ${PREFIX}/bin/help2man --help
+
+about:
+  home: https://www.gnu.org/software/help2man/
+  license: GPL-3.0
+  license_family: GPL3
+  license_file: COPYING
+  summary: 'help2man produces simple manual pages from the --help and --version output of other commands.'
+  doc_url: https://www.gnu.org/software/help2man/
+
+extra:
+  recipe-maintainers:
+    - jjhelmus
