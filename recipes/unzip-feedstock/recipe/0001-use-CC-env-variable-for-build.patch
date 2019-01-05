@@ -1,0 +1,24 @@
+From 13c73206b1595f522b4abcec841504a2dd181626 Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Wed, 18 Oct 2017 14:16:04 -0500
+Subject: [PATCH] use CC env variable for build
+
+---
+ unix/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/unix/Makefile b/unix/Makefile
+index ab32270..d0fb20a 100644
+--- a/unix/Makefile
++++ b/unix/Makefile
+@@ -42,7 +42,6 @@
+ # such as -DDOSWILD).
+ 
+ # UnZip flags
+-CC = cc#	try using "gcc" target rather than changing this (CC and LD
+ LD = $(CC)#	must match, else "unresolved symbol:  ___main" is possible)
+ AS = as
+ LOC = $(D_USE_BZ2) $(LOCAL_UNZIP)
+-- 
+2.7.4
+
