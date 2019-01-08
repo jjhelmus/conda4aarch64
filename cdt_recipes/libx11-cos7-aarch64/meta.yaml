@@ -1,0 +1,30 @@
+package:
+  name: libx11-cos7-aarch64
+  version: 1.6.5
+
+source:
+  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libX11-1.6.5-2.el7.aarch64.rpm
+    sha256: eebcb9d28d07ee5c8556d5cf79e54530c6e163dde4c0757e42dbf7c8e12a05d1
+    folder: binary
+  - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libX11-1.6.5-2.el7.src.rpm
+    folder: source
+
+requirements:
+  build:
+    - libx11-common-cos7-aarch64 >=1.6.5
+
+
+outputs:
+  - name: libx11-cos7-aarch64
+    noarch: generic
+    requirements:
+      run:
+        - libx11-common-cos7-aarch64 >=1.6.5
+
+    about:
+      home: http://www.x.org
+      license: MIT
+      license_family: MIT
+      summary: "(CDT) Core X11 protocol client library"
+      description: |
+        Core X11 protocol client library.

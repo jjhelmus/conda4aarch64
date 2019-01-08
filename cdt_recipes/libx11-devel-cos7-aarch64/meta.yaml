@@ -1,0 +1,30 @@
+package:
+  name: libx11-devel-cos7-aarch64
+  version: 1.6.5
+
+source:
+  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libX11-devel-1.6.5-2.el7.aarch64.rpm
+    sha256: 9f91e16745ada209fbe20217284812ad8066dee8993ac524b8f5357171f8b4eb
+    folder: binary
+  - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libX11-1.6.5-2.el7.src.rpm
+    folder: source
+
+requirements:
+  build:
+    - libx11-cos7-aarch64 ==1.6.5
+
+
+outputs:
+  - name: libx11-devel-cos7-aarch64
+    noarch: generic
+    requirements:
+      run:
+        - libx11-cos7-aarch64 ==1.6.5
+
+    about:
+      home: http://www.x.org
+      license: MIT
+      license_family: MIT
+      summary: "(CDT) Development files for libX11"
+      description: |
+        X.Org X11 libX11 development package

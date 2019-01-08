@@ -1,0 +1,24 @@
+package:
+  name: libx11-common-cos7-aarch64
+  version: 1.6.5
+
+source:
+  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libX11-common-1.6.5-2.el7.noarch.rpm
+    sha256: 936135fadd028f0a69f056a0841013e70a77b10125e04da35b875bccafb3a279
+    folder: binary
+  - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libX11-1.6.5-2.el7.src.rpm
+    folder: source
+
+
+
+outputs:
+  - name: libx11-common-cos7-aarch64
+    noarch: generic
+
+    about:
+      home: http://www.x.org
+      license: MIT
+      license_family: MIT
+      summary: "(CDT) Common data for libX11"
+      description: |
+        libX11 common data

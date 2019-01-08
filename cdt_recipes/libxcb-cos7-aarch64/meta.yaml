@@ -1,0 +1,26 @@
+package:
+  name: libxcb-cos7-aarch64
+  version: 1.12
+
+source:
+  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libxcb-1.12-1.el7.aarch64.rpm
+    sha256: a9b15723a3787b5aba0624d36f3a608d38974ce467c0f0149c34905711db71f3
+    folder: binary
+  - url: http://vault.centos.org/7.4.1708/os/Source/SPackages/libxcb-1.12-1.el7.src.rpm
+    folder: source
+
+
+
+outputs:
+  - name: libxcb-cos7-aarch64
+    noarch: generic
+
+    about:
+      home: http://xcb.freedesktop.org/
+      license: MIT
+      license_family: MIT
+      summary: "(CDT) A C binding to the X11 protocol"
+      description: |
+        The X protocol C-language Binding (XCB) is a replacement for Xlib featuring a
+        small footprint, latency hiding, direct access to the protocol, improved
+        threading support, and extensibility.
