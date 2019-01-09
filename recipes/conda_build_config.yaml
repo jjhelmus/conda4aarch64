@@ -1,0 +1,40 @@
+VERBOSE_AT:
+  - V=1
+VERBOSE_CM:
+  - VERBOSE=1
+noarch_python:
+  - False
+# compiler settings
+c_compiler_version:
+  - 7.3.0
+cxx_compiler_version:
+  - 7.3.0
+fortran_compiler_version:
+  - 7.3.0
+# these should be fixed in conda-build
+cdt_name:
+  - 'cos7'
+cdt_arch:
+  - 'aarch64'
+# conda-build sets this to ...cos6 by default
+BUILD:
+  - "aarch64-conda_cos7-linux-gnu"
+# package pins
+bzip2:
+  - 1.0
+expat:
+  - 2.2
+openssl:
+  - 1.0.2
+perl:
+  - 5.26
+python:
+  - 3.7
+sqlite:
+  - 3
+tk:
+  - 8.6
+zlib:
+  - 1.2
+xz:
+  - 5
