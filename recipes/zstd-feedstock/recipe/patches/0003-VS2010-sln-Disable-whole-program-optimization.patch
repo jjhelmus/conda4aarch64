@@ -1,0 +1,39 @@
+From 3055d0d80e468951ff5287ba5be7938f90a9ea1e Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Thu, 18 Oct 2018 21:07:47 +0100
+Subject: [PATCH 3/5] VS2010 (sln): Disable whole program optimization
+
+Note, we do not need this now since we use CMake to build it instead.
+---
+ build/VS2010/libzstd/libzstd.vcxproj | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/build/VS2010/libzstd/libzstd.vcxproj b/build/VS2010/libzstd/libzstd.vcxproj
+index 7c2af2b7..51ec60a4 100644
+--- a/build/VS2010/libzstd/libzstd.vcxproj
++++ b/build/VS2010/libzstd/libzstd.vcxproj
+@@ -104,13 +104,11 @@
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+     <ConfigurationType>StaticLibrary</ConfigurationType>
+     <UseDebugLibraries>false</UseDebugLibraries>
+-    <WholeProgramOptimization>true</WholeProgramOptimization>
+     <CharacterSet>MultiByte</CharacterSet>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+     <ConfigurationType>StaticLibrary</ConfigurationType>
+     <UseDebugLibraries>false</UseDebugLibraries>
+-    <WholeProgramOptimization>true</WholeProgramOptimization>
+     <CharacterSet>MultiByte</CharacterSet>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+@@ -226,7 +224,6 @@
+       <EnablePREfast>false</EnablePREfast>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+-      <WholeProgramOptimization>true</WholeProgramOptimization>
+       <OmitFramePointers>true</OmitFramePointers>
+       <AssemblerOutput>All</AssemblerOutput>
+     </ClCompile>
+-- 
+2.19.1
+

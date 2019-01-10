@@ -1,0 +1,53 @@
+{% set version = "2.6.0" %}
+
+package:
+  name: jsonschema
+  version: {{ version }}
+
+source:
+  fn: jsonschema-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/j/jsonschema/jsonschema-{{ version }}.tar.gz
+  sha256: 6ff5f3180870836cae40f06fa10419f557208175f13ad7bc26caa77beb1f6e02
+
+build:
+  entry_points:
+    - jsonschema = jsonschema.cli:main
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+    - vcversioner
+  run:
+    - python
+    - setuptools
+    - functools32  # [py27]
+
+test:
+  imports:
+    - jsonschema
+  commands:
+    - jsonschema --help
+
+about:
+  home: https://github.com/Julian/jsonschema
+  license: MIT
+  license_file: COPYING
+  summary: An implementation of JSON Schema validation for Python
+  description: |
+    jsonschema is an implementation of JSON Schema for Python
+    (supporting 2.7+ including Python 3)
+  doc_url: https://python-jsonschema.readthedocs.org
+  doc_source_url: https://github.com/Julian/jsonschema/blob/master/docs/index.rst
+  dev_url: https://github.com/Julian/jsonschema/
+
+extra:
+  recipe-maintainers:
+    - minrk
+    - ocefpaf
+    - nehaljwani
+    - mingwandroid

@@ -1,0 +1,53 @@
+{% set name = "lz4" %}
+{% set version = "2.1.1" %}
+{% set sha256 = "af46e2e5c002b3fbffa2ad69289aa61e46cab1a87c1d85bda44e822a1634defa" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+  host:
+    - python
+    - pip
+    - pytest-runner
+    - setuptools_scm
+    - pkgconfig
+    - lz4-c
+  run:
+    - python
+    - setuptools
+    - lz4-c
+
+test:
+  imports:
+    - lz4
+
+about:
+  home: https://github.com/python-lz4/python-lz4
+  license: BSD 3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: "LZ4 Bindings for Python"
+  description: |
+    Provides a Python interface for the LZ4 compression library.
+    LZ4 library provides support for three specifications-
+    frame format,block format and stream format.
+  doc_url: http://python-lz4.readthedocs.io/en/stable/
+  doc_source_url: https://github.com/python-lz4/python-lz4/blob/master/docs/index.rst
+  dev_url: https://github.com/python-lz4/python-lz4
+
+extra:
+  recipe-maintainers:
+    - jakirkham

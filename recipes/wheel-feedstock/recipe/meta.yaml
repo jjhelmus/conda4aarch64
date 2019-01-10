@@ -1,0 +1,48 @@
+{% set name = "wheel" %}
+{% set version = "0.32.1" %}
+{% set sha256 = "d215f4520a1ba1851a3c00ba2b4122665cd3d6b0834d2ba2816198b1e3024a0e" %}
+
+package:
+  name: {{ name.lower() }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+  entry_points:
+    - wheel = wheel.cli:main
+
+requirements:
+  host:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - setuptools
+
+test:
+  imports:
+    - wheel
+    - wheel.cli
+
+  commands:
+    - wheel --help
+
+about:
+  home: https://bitbucket.org/pypa/wheel/
+  license: MIT
+  license_file: LICENSE.txt
+  summary: A built-package format for Python.
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - pelson
+    - ocefpaf
+    - mingwandroid

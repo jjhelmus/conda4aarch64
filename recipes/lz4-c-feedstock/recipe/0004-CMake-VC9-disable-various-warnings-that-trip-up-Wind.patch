@@ -1,0 +1,52 @@
+From 92b982c1d447e72ffe1e40354314b00075fb42e1 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 23 Apr 2018 12:54:20 +0100
+Subject: [PATCH 4/5] CMake: VC9 disable various warnings that trip up Windows
+ SDK
+
+---
+ contrib/cmake_unofficial/CMakeLists.txt | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/contrib/cmake_unofficial/CMakeLists.txt b/contrib/cmake_unofficial/CMakeLists.txt
+index c98ad0e..e4a197a 100644
+--- a/contrib/cmake_unofficial/CMakeLists.txt
++++ b/contrib/cmake_unofficial/CMakeLists.txt
+@@ -136,6 +136,25 @@ add_executable(lz4c ${LZ4_CLI_SOURCES})
+ set_target_properties(lz4c PROPERTIES COMPILE_DEFINITIONS "ENABLE_LZ4C_LEGACY_OPTIONS")
+ target_link_libraries(lz4c ${LZ4_LINK_LIBRARY})
+ 
++set(MSVC_WARNING_FLAGS)
++if(MSVC_VERSION GREATER_EQUAL 1900)
++  list(APPEND MSVC_WARNING_FLAGS "/W4")
++else()
++  list(APPEND MSVC_WARNING_FLAGS "/W3")
++  # disable: C4127: conditional expression is constant
++  list(APPEND MSVC_WARNING_FLAGS "/wd4127")
++  # disable: C4711: function selected for automatic inline expansion
++  list(APPEND MSVC_WARNING_FLAGS "/wd4711")
++  # disable: C4820: bytes padding after data member
++  list(APPEND MSVC_WARNING_FLAGS "/wd4820")
++  # disable: C4668: is not defined as a preprocessor macro, replacing with '0'
++  list(APPEND MSVC_WARNING_FLAGS "/wd4668")
++  # disable: C4710: 'UTIL_getTotalFileSize' : function not inlined
++  list(APPEND MSVC_WARNING_FLAGS "/wd4710")
++  # disable: C4255: no function prototype given: converting '()' to '(void)'
++  list(APPEND MSVC_WARNING_FLAGS "/wd4255")
++endif(MSVC_VERSION GREATER_EQUAL 1900)
++
+ # Extra warning flags
+ include (CheckCCompilerFlag)
+ foreach (flag
+@@ -152,7 +171,7 @@ foreach (flag
+     -Wpointer-arith
+ 
+     # MSVC-style
+-    /W4)
++    ${MSVC_WARNING_FLAGS})
+   # Because https://gcc.gnu.org/wiki/FAQ#wnowarning
+   string(REGEX REPLACE "\\-Wno\\-(.+)" "-W\\1" flag_to_test "${flag}")
+   string(REGEX REPLACE "[^a-zA-Z0-9]+" "_" test_name "CFLAG_${flag_to_test}")
+-- 
+2.17.0
+

@@ -1,0 +1,31 @@
+{% set version = "2.6.0" %}
+
+package:
+  name: conda-env
+  version: {{ version }}
+
+build:
+  number: 1
+
+test:
+  requires:
+    - python
+
+about:
+  home: https://github.com/conda/conda-env
+  summary: Tools for interacting with conda environments.
+  license: BSD 3-Clause
+  
+  description: |
+    Provides the conda env interface to Conda environments.
+  doc_url: https://conda.io/docs/user-guide/overview.html
+  dev_url: https://github.com/conda/conda-env
+  doc_source_url: https://github.com/conda/conda-docs
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - kalefranz
+    - mcg1969
+    - msarahan
+    - pelson

@@ -1,0 +1,36 @@
+{% set version = "0.1.12" %}
+
+package:
+  name: iso8601
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/i/iso8601/iso8601-{{ version }}.tar.gz
+  sha256: 49c4b20e1f38aa5cf109ddcd39647ac419f928512c869dc01d5c7098eddede82
+
+build:
+  number: 1
+  script: python setup.py install --single-version-externally-managed --record record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+  run:
+    - python
+
+test:
+  imports:
+    - iso8601
+
+about:
+  home: https://bitbucket.org/micktwomey/pyiso8601
+  license: MIT
+  summary: 'Simple module to parse ISO 8601 dates'
+  doc_url: http://pyiso8601.readthedocs.io/en/latest/
+
+extra:
+    recipe-maintainers:
+    - ChrisBarker-NOAA
+    - JamesMakela-NOAA
+    - ocefpaf

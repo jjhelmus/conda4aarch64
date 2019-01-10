@@ -1,0 +1,65 @@
+{% set name = "PyYAML" %}
+{% set version = "3.13" %}
+{% set build = 0 %}
+
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/yaml/pyyaml.git
+  git_tag: {{ version }}
+  patches:
+    - 0001-Ensure-we-do-not-end-up-wih-CRLF-line-endings-on-tes.patch
+
+build:
+  number: {{ build }}
+  script:
+    - echo on
+    # Because CRLF:
+    - git rm -q --cached -r tests/data  # [win]
+    - git reset --hard                  # [win]
+    - python setup.py --with-libyaml build_ext --include-dirs="${PREFIX}/include" --library-dirs="${PREFIX}/lib"  # [unix]
+    - python setup.py --with-libyaml build_ext --include-dirs="%LIBRARY_INC%" --library-dirs="%LIBRARY_LIB%"      # [win]
+    - python setup.py install
+    - python setup.py test
+
+requirements:
+
+  build:
+    - {{ compiler('c') }}
+    - git
+
+  host:
+    - python
+    - cython
+    - yaml
+
+  run:
+    - python
+    - yaml
+
+test:
+  imports:
+    - yaml
+    - _yaml
+
+about:
+  home: http://pyyaml.org/wiki/PyYAML
+  license_file: LICENSE
+  license: MIT
+  license_family: MIT
+  summary: YAML parser and emitter for Python
+  description: |
+    YAML is a data serialization format designed for human readability and interaction with
+    scripting languages.
+  doc_url: http://pyyaml.org/wiki/PyYAMLDocumentation
+  doc_source_url: http://pyyaml.org/browser/pyyaml/trunk/README
+  dev_url: https://github.com/yaml/pyyaml
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - msarahan
+    - pelson

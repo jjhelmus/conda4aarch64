@@ -1,0 +1,62 @@
+From 2337a0f3a9adfa91404cc7873536c2b1bdbc1a32 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 23 Apr 2018 16:01:48 -0500
+Subject: [PATCH] CMake: link the CLI programs statically to the lib code
+
+This is what the Makefile system does and the binaries are so small that
+there is not much benefit to shared linking here, but mostly I have done
+this to align the systems.
+---
+ contrib/cmake_unofficial/CMakeLists.txt | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
+
+diff --git a/contrib/cmake_unofficial/CMakeLists.txt b/contrib/cmake_unofficial/CMakeLists.txt
+index 8bcf5bd..c3fe988 100644
+--- a/contrib/cmake_unofficial/CMakeLists.txt
++++ b/contrib/cmake_unofficial/CMakeLists.txt
+@@ -87,11 +87,13 @@ set(LZ4_SOURCES
+   "${LZ4_LIB_SOURCE_DIR}/lz4frame.h"
+   "${LZ4_LIB_SOURCE_DIR}/xxhash.c")
+ set(LZ4_CLI_SOURCES
++  # The Makefile build system does not link shared libraries to
++  # the CLI programs so we take the same approach here.
++  "${LZ4_SOURCES}"
+   "${LZ4_PROG_SOURCE_DIR}/bench.c"
+   "${LZ4_PROG_SOURCE_DIR}/lz4cli.c"
+   "${LZ4_PROG_SOURCE_DIR}/lz4io.c"
+-  "${LZ4_PROG_SOURCE_DIR}/datagen.c"
+-  "${LZ4_LIB_SOURCE_DIR}/xxhash.c")
++  "${LZ4_PROG_SOURCE_DIR}/datagen.c")
+ 
+ 
+ # Whether to use position independent code for the static library.  If
+@@ -120,13 +122,6 @@ if(BUILD_STATIC_LIBS)
+   list(APPEND LZ4_LIBRARIES_BUILT lz4_static)
+ endif()
+ 
+-# link to shared whenever possible, to static otherwise
+-if(BUILD_SHARED_LIBS)
+-  set(LZ4_LINK_LIBRARY lz4_shared)
+-else()
+-  set(LZ4_LINK_LIBRARY lz4_static)
+-endif()
+-
+ # ensure the filenames are the same as when using the bundled VS solution files
+ if(MSVC)
+   set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
+@@ -137,12 +132,10 @@ endif()
+ # lz4
+ add_executable(lz4cli ${LZ4_CLI_SOURCES})
+ set_target_properties(lz4cli PROPERTIES OUTPUT_NAME lz4)
+-target_link_libraries(lz4cli ${LZ4_LINK_LIBRARY})
+ 
+ # lz4c
+ add_executable(lz4c ${LZ4_CLI_SOURCES})
+ set_target_properties(lz4c PROPERTIES COMPILE_DEFINITIONS "ENABLE_LZ4C_LEGACY_OPTIONS")
+-target_link_libraries(lz4c ${LZ4_LINK_LIBRARY})
+ 
+ # datagen
+ add_executable(datagen "${LZ4_PROG_SOURCE_DIR}/datagen.c" "${LZ4_TESTS_SOURCE_DIR}/datagencli.c")
+-- 
+2.15.0
+

@@ -1,0 +1,79 @@
+From 35aba3d6e3c99fcd527c677bef8efeb59963fe8a Mon Sep 17 00:00:00 2001
+Message-Id: <35aba3d6e3c99fcd527c677bef8efeb59963fe8a.1397340102.git.srivasta@golden-gryphon.com>
+From: Manoj Srivastava <srivasta@golden-gryphon.com>
+Date: Wed, 9 Apr 2014 00:23:07 -0700
+Subject: [PATCH 1/1] [bison-test-fixes] Do not use obsolete bison constructs in tests.
+
+In Bison 3.0, support for YYLEX_PARAM and YYPARSE_PARAM has been
+removed (deprecated in Bison 1.875): use %lex-param, %parse-param, or
+%param. This commit fixes the tests so they still work.
+
+Signed-off-by: Manoj Srivastava <srivasta@golden-gryphon.com>
+---
+ tests/test-bison-yylloc/parser.y | 4 ++--
+ tests/test-bison-yylval/parser.y | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+  50.0% tests/test-bison-yylloc/
+  50.0% tests/test-bison-yylval/
+
+diff --git tests/test-bison-yylloc/parser.y tests/test-bison-yylloc/parser.y
+index e8f4e56..224d252 100644
+--- tests/test-bison-yylloc/parser.y
++++ tests/test-bison-yylloc/parser.y
+@@ -22,6 +22,7 @@
+  */
+ 
+ %parse-param { void* scanner }
++%lex-param { void* scanner }
+ 
+ /* 
+    How to compile:
+@@ -34,7 +35,6 @@
+ #include "config.h"
+ 
+ #define YYERROR_VERBOSE 1
+-#define YYLEX_PARAM   scanner
+ 
+ extern int testget_lineno(void*);
+ 
+@@ -52,7 +52,7 @@ int process_text(char* s) {
+ 
+ %}
+ 
+-%pure_parser
++%pure-parser
+ 
+ %union  {
+     int  lineno;
+diff --git tests/test-bison-yylval/parser.y tests/test-bison-yylval/parser.y
+index 0ffdb89..626c5e7 100644
+--- tests/test-bison-yylval/parser.y
++++ tests/test-bison-yylval/parser.y
+@@ -26,6 +26,7 @@
+    bison --defines --output-file="parser.c" --name-prefix="test" parser.y
+  */
+ %parse-param { void* scanner }
++%lex-param { void* scanner }
+ %{
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -33,7 +34,6 @@
+ #include "config.h"
+ 
+ #define YYERROR_VERBOSE 1
+-#define YYLEX_PARAM   scanner
+ 
+ 
+ /* A dummy function. A check against seg-faults in yylval->str. */
+@@ -49,7 +49,7 @@ int process_text(char* s) {
+ 
+ %}
+ 
+-%pure_parser
++%pure-parser
+ 
+ %union  {
+     long unused;
+-- 
+1.9.2
+

@@ -1,0 +1,30 @@
+From 653ef624c695f9e70d1c486659aee1a3eedea736 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 23 Apr 2018 13:15:22 +0100
+Subject: [PATCH 6/6] CMake: Set SHARED/STATIC/IMPORT_LIBRARY_PREFIXes for MSVC
+
+---
+ contrib/cmake_unofficial/CMakeLists.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/contrib/cmake_unofficial/CMakeLists.txt b/contrib/cmake_unofficial/CMakeLists.txt
+index f70fe86..8bcf5bd 100644
+--- a/contrib/cmake_unofficial/CMakeLists.txt
++++ b/contrib/cmake_unofficial/CMakeLists.txt
+@@ -127,6 +127,13 @@ else()
+   set(LZ4_LINK_LIBRARY lz4_static)
+ endif()
+ 
++# ensure the filenames are the same as when using the bundled VS solution files
++if(MSVC)
++  set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
++  set(CMAKE_STATIC_LIBRARY_PREFIX "lib")
++  set(CMAKE_IMPORT_LIBRARY_PREFIX "lib")
++endif()
++
+ # lz4
+ add_executable(lz4cli ${LZ4_CLI_SOURCES})
+ set_target_properties(lz4cli PROPERTIES OUTPUT_NAME lz4)
+-- 
+2.17.0
+

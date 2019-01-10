@@ -1,0 +1,24 @@
+From 28a33f880fb20b2a07781afd2cbba9412518bc4d Mon Sep 17 00:00:00 2001
+From: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date: Sun, 29 Jul 2018 08:27:16 -0500
+Subject: [PATCH] librhash requires libdl for dlopen()
+
+---
+ Source/Modules/FindLibRHash.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Source/Modules/FindLibRHash.cmake b/Source/Modules/FindLibRHash.cmake
+index 86c6189f30..538e95a841 100644
+--- a/Source/Modules/FindLibRHash.cmake
++++ b/Source/Modules/FindLibRHash.cmake
+@@ -68,6 +68,7 @@ if(LibRHash_FOUND)
+     set_target_properties(LibRHash::LibRHash PROPERTIES
+       IMPORTED_LOCATION "${LibRHash_LIBRARY}"
+       INTERFACE_INCLUDE_DIRECTORIES "${LibRHash_INCLUDE_DIRS}"
++      INTERFACE_LINK_LIBRARIES "${CMAKE_DL_LIBS}"
+       )
+   endif()
+ endif()
+-- 
+2.17.0
+

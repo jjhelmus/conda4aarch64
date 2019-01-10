@@ -1,0 +1,128 @@
+{% set name = "conda-build" %}
+{% set version = "3.16.0" %}
+{% set sha256 = "31b2e99a3c7c3a5ab5a6d4d9261b13a9788ac1389107d6faa2998a9420501913" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name}}-{{ version }}.tar.gz
+  url: https://github.com/conda/{{ name }}/archive/{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  entry_points:
+    - conda-build = conda_build.cli.main_build:main
+    - conda-convert = conda_build.cli.main_convert:main
+    - conda-develop = conda_build.cli.main_develop:main
+    - conda-index = conda_build.cli.main_index:main
+    - conda-inspect = conda_build.cli.main_inspect:main
+    - conda-metapackage = conda_build.cli.main_metapackage:main
+    - conda-render = conda_build.cli.main_render:main
+    - conda-skeleton = conda_build.cli.main_skeleton:main
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - beautifulsoup4
+    - chardet
+    - conda  >=4.3
+    - contextlib2        # [py27]
+    - enum34             # [py27]
+    - filelock
+    - futures            # [py27]
+    # TODO: glob2 should only be necessary for py27, but cleanup release will be 3.12.2 or beyond.
+    # # [py27]
+    - glob2 >=0.6
+    - jinja2
+    - libarchive
+    - patchelf      # [linux]
+    - pkginfo
+    - psutil
+    - python
+    - python-libarchive-c
+    - pytz
+    - pyyaml
+    - scandir            # [py27]
+    - six
+    - tqdm
+
+  run_constrained:
+    - conda-verify  >=3.1.0
+
+test:
+  # If you run the test suite (~10 min), these are required
+  # requires:
+  #   - pytest
+  #   - pytest-cov
+  #   - pytest-catchlog
+  #   - pytest-xdist
+  #   - pytest-env
+
+  files:
+    - test_bdist_conda_setup.py
+
+  imports:
+    - conda_build
+
+  commands:
+    # Check for all subcommands
+    - type -P conda-build  # [unix]
+    - where conda-build  # [win]
+    - conda-build -h
+    - type -P conda-convert  # [unix]
+    - where conda-convert  # [win]
+    - conda-convert -h
+    - type -P conda-develop  # [unix]
+    - where conda-develop  # [win]
+    - conda-develop -h
+    - type -P conda-index  # [unix]
+    - where conda-index  # [win]
+    - conda-index -h
+    - type -P conda-inspect  # [unix]
+    - where conda-inspect  # [win]
+    - conda-inspect linkages -h \| grep "--name ENVIRONMENT"  # [unix]
+    - conda-inspect objects -h \| grep "--name ENVIRONMENT"   # [osx]
+    - conda-inspect -h
+    - type -P conda-metapackage  # [unix]
+    - where conda-metapackage  # [win]
+    - conda-metapackage -h
+    - type -P conda-render  # [unix]
+    - where conda-render  # [win]
+    - conda-render -h
+    - type -P conda-skeleton  # [unix]
+    - where conda-skeleton  # [win]
+    - conda-skeleton -h
+
+    # Check for bdist_conda
+    - python test_bdist_conda_setup.py bdist_conda --help
+
+about:
+  home: https://github.com/conda/conda-build
+  summary: tools for building conda packages
+  license: BSD 3-Clause
+  license_family: BSD
+  license_file: LICENSE.txt
+  description: |
+    Conda-build contains commands and tools to allow you to build your own
+    packages for conda.
+  doc_url: http://conda.pydata.org/docs/
+  dev_url: https://github.com/conda/conda-build
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - jjhelmus
+    - mingwandroid
+    - msarahan
+    - mwcraig
+    - ocefpaf
+    - patricksnape
+    - pelson
+    - scopatz
+    - stuertz
+    - CJ-Wright

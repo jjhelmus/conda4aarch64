@@ -1,0 +1,46 @@
+{% set version = "2018.10.15" %}
+
+package:
+  name: certifi
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/c/certifi/certifi-{{ version }}.tar.gz
+  sha256: 6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a
+
+build:
+  number: 0
+  preserve_egg_dir: True
+  script: python setup.py install
+
+requirements:
+  host:
+    - python
+  run:
+    - python
+
+test:
+  imports:
+    - certifi
+
+about:
+  home: http://certifi.io/
+  license: ISC
+  license_file: LICENSE
+  summary: Python package for providing Mozilla's CA Bundle.
+  description: |
+   Certifi is a curated collection of Root Certificates for validating the
+   trustworthiness of SSL certificates while verifying the identity of TLS
+   hosts.
+  doc_url: https://pypi.python.org/pypi/certifi
+  dev_url: https://github.com/certifi/python-certifi
+  doc_source_url: https://github.com/certifi/certifi.io/blob/master/README.rst
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - pelson
+    - sigmavirus24
+    - ocefpaf
+    - mingwandroid
+    - jjhelmus

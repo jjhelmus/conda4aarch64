@@ -1,0 +1,54 @@
+From 2d7e7438024e47650c3a0c9f5f313c6eb6acae2d Mon Sep 17 00:00:00 2001
+From: Akim Demaille <akim.demaille@gmail.com>
+Date: Sun, 2 Sep 2018 09:20:06 +0200
+Subject: examples: beware of shell portability issues
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some shells don't grok `local var=$val` very well: they need the rhs
+to be quoted.
+
+    ./examples/test: 66: local: you.,: bad variable name
+    FAIL examples/variant.test (exit status: 2)
+
+Reported by Étienne Renault.
+
+* examples/test (run): Quote the values in 'local' assignments.
+---
+ THANKS        | 1 +
+ examples/test | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/THANKS b/THANKS
+index c655e3c..7a69245 100644
+--- a/THANKS
++++ b/THANKS
+@@ -51,6 +51,7 @@ Didier Godefroy           dg@ulysium.net
+ Efi Fogel                 efifogel@gmail.com
+ Enrico Scholz             enrico.scholz@informatik.tu-chemnitz.de
+ Eric Blake                ebb9@byu.net
++Étienne Renault           renault@lrde.epita.fr
+ Evgeny Stambulchik        fnevgeny@plasma-gate.weizmann.ac.il
+ Fabrice Bauzac            noon@cote-dazur.com
+ Ferdinand Thiessen        ferdinand@fthiessen.de
+diff --git a/examples/test b/examples/test
+index a243921..e4ffa25 100755
+--- a/examples/test
++++ b/examples/test
+@@ -60,10 +60,10 @@ cd $$.dir
+ run ()
+ {
+   # Expected exit status.
+-  local sta_exp=$1
++  local sta_exp="$1"
+   shift
+   # Expected output.
+-  local out_exp=$1
++  local out_exp="$1"
+   shift
+   # Effective exit status.
+   local sta_eff=0
+-- 
+cgit v1.0-41-gc330
+

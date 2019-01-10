@@ -1,0 +1,28 @@
+From 08aa254b2938bc6312a1f2e8c73c6c07ff24d8e5 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 23 Apr 2018 12:48:41 +0100
+Subject: [PATCH 2/5] CMake: include xxhash.c in LZ4_CLI_SOURCES (it is built
+ statically, without exports)
+
+---
+ contrib/cmake_unofficial/CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/contrib/cmake_unofficial/CMakeLists.txt b/contrib/cmake_unofficial/CMakeLists.txt
+index 27c3a78..b402153 100644
+--- a/contrib/cmake_unofficial/CMakeLists.txt
++++ b/contrib/cmake_unofficial/CMakeLists.txt
+@@ -89,7 +89,9 @@ set(LZ4_CLI_SOURCES
+   "${LZ4_PROG_SOURCE_DIR}/bench.c"
+   "${LZ4_PROG_SOURCE_DIR}/lz4cli.c"
+   "${LZ4_PROG_SOURCE_DIR}/lz4io.c"
+-  "${LZ4_PROG_SOURCE_DIR}/datagen.c")
++  "${LZ4_PROG_SOURCE_DIR}/datagen.c"
++  "${LZ4_LIB_SOURCE_DIR}/xxhash.c")
++
+ 
+ # Whether to use position independent code for the static library.  If
+ # we're building a shared library this is ignored and PIC is always
+-- 
+2.17.0
+

@@ -1,0 +1,55 @@
+{% set version = "4.4.0" %}
+
+package:
+  name: nbformat
+  version: {{ version }}
+
+source:
+  fn: nbformat-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/n/nbformat/nbformat-{{ version }}.tar.gz
+  sha256: f7494ef0df60766b7cabe0a3651556345a963b74dbc16bc7c18479041170d402 
+
+build:
+  number: 0
+  script: pip install --no-deps .
+  # fixme: remove redundant conda entrypoints when we can
+  entry_points:
+    - jupyter-trust = nbformat.sign:TrustNotebookApp.launch_instance
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+    - ipython_genutils
+    - traitlets >=4.1
+    - jsonschema >=2.4,!=2.5.0
+    - jupyter_core
+
+test:
+  commands:
+    - jupyter-trust -h
+  imports:
+    - nbformat
+
+about:
+  home: http://jupyter.org
+  license: BSD 3-clause
+  summary: The Jupyter Notebook format
+  license_file: COPYING.md
+  summary: The reference implementation of the Jupyter Notebook format
+  description: |
+    nbformat contains the reference implementation of the Jupyter Notebook
+    format, and Python APIs for working with notebooks.
+  doc_url: http://nbformat.readthedocs.org
+  dev_url: https://github.com/jupyter/nbformat
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - minrk
+    - pelson
+    - takluyver
+    - ocefpaf
+    - mpacer

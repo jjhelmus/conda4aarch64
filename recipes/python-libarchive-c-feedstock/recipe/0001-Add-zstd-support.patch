@@ -1,0 +1,21 @@
+diff -urN libarchive-c-2.8.orig/libarchive/ffi.py libarchive-c-2.8/libarchive/ffi.py
+--- libarchive-c-2.8.orig/libarchive/ffi.py	2018-09-21 19:01:52.000000000 +0100
++++ libarchive-c-2.8/libarchive/ffi.py	2018-09-21 19:02:25.000000000 +0100
+@@ -167,7 +167,7 @@
+ 
+ READ_FILTERS = set((
+     'all', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzma',
+-    'lzop', 'none', 'rpm', 'uu', 'xz', 'lz4'
++    'lzop', 'none', 'rpm', 'uu', 'xz', 'lz4', 'zstd'
+ ))
+ for f_name in list(READ_FILTERS):
+     try:
+@@ -229,7 +229,7 @@
+ 
+ WRITE_FILTERS = set((
+     'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzma',
+-    'lzop', 'uuencode', 'xz', 'lz4'
++    'lzop', 'uuencode', 'xz', 'lz4', 'zstd'
+ ))
+ for f_name in list(WRITE_FILTERS):
+     try:

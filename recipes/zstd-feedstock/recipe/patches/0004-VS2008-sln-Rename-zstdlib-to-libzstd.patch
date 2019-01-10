@@ -1,0 +1,29 @@
+From 4fb635ec227d0e8e1e9df5bf9db709beaf3a691b Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Thu, 18 Oct 2018 21:10:19 +0100
+Subject: [PATCH 4/5] VS2008 (sln): Rename zstdlib to libzstd
+
+Note, we do not need this now since we use CMake to build it instead.
+---
+ build/VS2008/zstdlib/zstdlib.vcproj | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/VS2008/zstdlib/zstdlib.vcproj b/build/VS2008/zstdlib/zstdlib.vcproj
+index 5f89ebf8..61d39904 100644
+--- a/build/VS2008/zstdlib/zstdlib.vcproj
++++ b/build/VS2008/zstdlib/zstdlib.vcproj
+@@ -2,9 +2,9 @@
+ <VisualStudioProject
+ 	ProjectType="Visual C++"
+ 	Version="9.00"
+-	Name="zstdlib"
++	Name="libzstd"
+ 	ProjectGUID="{99DE2A79-7298-4004-A0ED-030D7A3796CA}"
+-	RootNamespace="zstdlib"
++	RootNamespace="libzstd"
+ 	Keyword="Win32Proj"
+ 	TargetFrameworkVersion="196613"
+ 	>
+-- 
+2.19.1
+

@@ -1,0 +1,130 @@
+From 0b2fd52c2f9de1c3298595eed4fe50b435a42d91 Mon Sep 17 00:00:00 2001
+From: "David R. MacIver" <david@drmaciver.com>
+Date: Wed, 2 May 2018 08:18:26 +0100
+Subject: [PATCH 01/10] Add compatibility tests for Python 3.7
+
+---
+ .travis.yml                               | 1 +
+ hypothesis-python/tox.ini                 | 2 +-
+ tooling/src/hypothesistooling/__main__.py | 6 ++++++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/hypothesis-python/tox.ini b/hypothesis-python/tox.ini
+index d8ee9f814..6e34653ef 100644
+--- a/hypothesis-python/tox.ini
++++ b/hypothesis-python/tox.ini
+@@ -1,5 +1,5 @@
+ [tox]
+-envlist = py{27,34,35,36,py27}-{brief,prettyquick,full,custom}
++envlist = py{27,34,35,37,36,37,py27}-{brief,prettyquick,full,custom}
+ toxworkdir={env:TOX_WORK_DIR:.tox}
+ 
+ [testenv]
+
+From 4664c5df28e76b85dd531bb094a8a4d571b4fa50 Mon Sep 17 00:00:00 2001
+From: "David R. MacIver" <david@drmaciver.com>
+Date: Wed, 2 May 2018 10:32:43 +0100
+Subject: [PATCH 04/10] Temporarily turn on verbose building
+
+---
+ tooling/scripts/ensure-python.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tooling/scripts/ensure-python.sh b/tooling/scripts/ensure-python.sh
+index 8f3a9e459..93c5ebf4f 100755
+--- a/tooling/scripts/ensure-python.sh
++++ b/tooling/scripts/ensure-python.sh
+@@ -57,7 +57,7 @@ if [ ! -e "$TARGET/bin/python" ] ; then
+     fi
+ 
+     for _ in $(seq 5); do
+-        if "$BASE/pyenv/plugins/python-build/bin/python-build" "$VERSION" "$TARGET" ; then
++        if "$BASE/pyenv/plugins/python-build/bin/python-build" -v "$VERSION" "$TARGET" ; then
+             exit 0
+         fi
+         echo "Command failed. Retrying..."
+
+diff --git a/tooling/src/hypothesistooling/__main__.py b/tooling/src/hypothesistooling/__main__.py
+index a8ce91cdf..04912618c 100644
+--- a/tooling/src/hypothesistooling/__main__.py
++++ b/tooling/src/hypothesistooling/__main__.py
+@@ -447,6 +447,7 @@ def run_tox(task, version):
+ def install_core():
+     install.python_executable(PY27)
+     install.python_executable(PY36)
++    install.python_executable(PY37)
+ 
+ 
+ ALIASES = {
+
+From 91c68d44b5ff246bb3b443cd2c95af457a43c75d Mon Sep 17 00:00:00 2001
+From: "David R. MacIver" <david@drmaciver.com>
+Date: Wed, 2 May 2018 11:06:20 +0100
+Subject: [PATCH 06/10] Revert "Temporarily turn on verbose building"
+
+This reverts commit 4664c5df28e76b85dd531bb094a8a4d571b4fa50.
+---
+ tooling/scripts/ensure-python.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tooling/scripts/ensure-python.sh b/tooling/scripts/ensure-python.sh
+index 93c5ebf4f..8f3a9e459 100755
+--- a/tooling/scripts/ensure-python.sh
++++ b/tooling/scripts/ensure-python.sh
+@@ -57,7 +57,7 @@ if [ ! -e "$TARGET/bin/python" ] ; then
+     fi
+ 
+     for _ in $(seq 5); do
+-        if "$BASE/pyenv/plugins/python-build/bin/python-build" -v "$VERSION" "$TARGET" ; then
++        if "$BASE/pyenv/plugins/python-build/bin/python-build" "$VERSION" "$TARGET" ; then
+             exit 0
+         fi
+         echo "Command failed. Retrying..."
+
+From 6c0e6f7a2a9be3e9d72e9d37bda52c7b05e97d5e Mon Sep 17 00:00:00 2001
+From: "David R. MacIver" <david@drmaciver.com>
+Date: Fri, 11 May 2018 18:37:27 +0100
+Subject: [PATCH 09/10] Allow the unicode literal to appear in the output
+ instead
+
+---
+ hypothesis-python/tests/pytest/test_capture.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/hypothesis-python/tests/pytest/test_capture.py b/hypothesis-python/tests/pytest/test_capture.py
+index 866907df8..e836a814d 100644
+--- a/hypothesis-python/tests/pytest/test_capture.py
++++ b/hypothesis-python/tests/pytest/test_capture.py
+@@ -81,7 +81,8 @@ def test_output_emitting_unicode(testdir, monkeypatch):
+         script, '--verbose', '--capture=no')
+     out = '\n'.join(result.stdout.lines)
+     assert 'test_emits_unicode' in out
+-    assert escape_unicode_characters(hunichr(1001)) in out
++    c = hunichr(1001
++    assert escape_unicode_characters(c) in out or c in out
+     assert result.ret == 0
+ 
+ 
+
+From 3000f7528af8d0827ec66c2b470fdc2e81d96a70 Mon Sep 17 00:00:00 2001
+From: "David R. MacIver" <david@drmaciver.com>
+Date: Fri, 11 May 2018 18:40:40 +0100
+Subject: [PATCH 10/10] Oops syntax
+
+---
+ hypothesis-python/tests/pytest/test_capture.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hypothesis-python/tests/pytest/test_capture.py b/hypothesis-python/tests/pytest/test_capture.py
+index e836a814d..effb2e843 100644
+--- a/hypothesis-python/tests/pytest/test_capture.py
++++ b/hypothesis-python/tests/pytest/test_capture.py
+@@ -81,7 +81,7 @@ def test_output_emitting_unicode(testdir, monkeypatch):
+         script, '--verbose', '--capture=no')
+     out = '\n'.join(result.stdout.lines)
+     assert 'test_emits_unicode' in out
+-    c = hunichr(1001
++    c = hunichr(1001)
+     assert escape_unicode_characters(c) in out or c in out
+     assert result.ret == 0
+ 

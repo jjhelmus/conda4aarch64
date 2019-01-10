@@ -1,0 +1,39 @@
+From d908fb3f181de1983ab05387d8e962b7cd4587e3 Mon Sep 17 00:00:00 2001
+From: Akim Demaille <akim.demaille@gmail.com>
+Date: Sun, 2 Sep 2018 09:20:06 +0200
+Subject: examples: beware of shell portability issues
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This completes 2d7e7438024e47650c3a0c9f5f313c6eb6acae2d.
+
+Some shells don't grok "local var=`cmd`" very well: they need the rhs
+to be quoted.
+
+    ./examples/test: 72: local: you.,: bad variable name
+    FAIL examples/variant.test (exit status: 2)
+
+Reported by Étienne Renault.
+
+* examples/test (run): Quote the values in 'local' assignments.
+---
+ examples/test | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/examples/test b/examples/test
+index e4ffa25..cd3d17d 100755
+--- a/examples/test
++++ b/examples/test
+@@ -69,7 +69,7 @@ run ()
+   local sta_eff=0
+   $prog "$@" - <input >out_eff || sta_eff=$?
+   # Effective output.
+-  local out_eff=`cat out_eff`
++  local out_eff="`cat out_eff`"
+   if test $sta_eff -eq $sta_exp; then
+     if test "$out_eff" = "$out_exp"; then
+       echo "$me: PASS: $number"
+-- 
+cgit v1.0-41-gc330
+

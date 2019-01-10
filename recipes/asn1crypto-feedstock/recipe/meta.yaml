@@ -1,0 +1,38 @@
+{% set version = "0.24.0" %}
+
+package:
+  name: asn1crypto
+  version: {{ version }}
+
+source:
+  fn: asn1crypto-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/a/asn1crypto/asn1crypto-{{ version }}.tar.gz
+  sha256: 9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+  imports:
+    - asn1crypto
+
+about:
+  home: https://github.com/wbond/asn1crypto
+  license: MIT
+  license_file: LICENSE
+  summary: Python ASN.1 library with a focus on performance and a pythonic API
+  doc_url: https://github.com/wbond/asn1crypto#documentation
+  dev_url: https://github.com/wbond/asn1crypto
+
+extra:
+  recipe-maintainers:
+    - jschueller

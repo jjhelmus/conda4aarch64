@@ -1,0 +1,35 @@
+From 70eefd9c33e04f62571249f0a5efd5923f3b0803 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 23 Apr 2018 12:54:52 +0100
+Subject: [PATCH 5/5] CMake: Add datagen executable
+
+---
+ contrib/cmake_unofficial/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/contrib/cmake_unofficial/CMakeLists.txt b/contrib/cmake_unofficial/CMakeLists.txt
+index e4a197a..f70fe86 100644
+--- a/contrib/cmake_unofficial/CMakeLists.txt
++++ b/contrib/cmake_unofficial/CMakeLists.txt
+@@ -73,6 +73,7 @@ endif()
+ 
+ set(LZ4_LIB_SOURCE_DIR "${LZ4_TOP_SOURCE_DIR}/lib")
+ set(LZ4_PROG_SOURCE_DIR "${LZ4_TOP_SOURCE_DIR}/programs")
++set(LZ4_TESTS_SOURCE_DIR "${LZ4_TOP_SOURCE_DIR}/tests")
+ 
+ include_directories("${LZ4_LIB_SOURCE_DIR}")
+ 
+@@ -136,6 +137,10 @@ add_executable(lz4c ${LZ4_CLI_SOURCES})
+ set_target_properties(lz4c PROPERTIES COMPILE_DEFINITIONS "ENABLE_LZ4C_LEGACY_OPTIONS")
+ target_link_libraries(lz4c ${LZ4_LINK_LIBRARY})
+ 
++# datagen
++add_executable(datagen "${LZ4_PROG_SOURCE_DIR}/datagen.c" "${LZ4_TESTS_SOURCE_DIR}/datagencli.c")
++target_include_directories(datagen PRIVATE "${LZ4_PROG_SOURCE_DIR}")
++
+ set(MSVC_WARNING_FLAGS)
+ if(MSVC_VERSION GREATER_EQUAL 1900)
+   list(APPEND MSVC_WARNING_FLAGS "/W4")
+-- 
+2.17.0
+

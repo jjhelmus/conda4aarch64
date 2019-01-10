@@ -1,0 +1,54 @@
+{% set name = "lzo" %}
+{% set version = "2.10" %}
+{% set version_major = "2" %}
+{% set hash_type = "sha256" %}
+{% set hash_val = "c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: http://www.oberhumer.com/opensource/{{ name }}/download/{{ name }}-{{ version }}.tar.gz
+  {{ hash_type }}: {{ hash_val }}
+
+build:
+  number: 2
+  run_exports:
+    # excellent compat: https://abi-laboratory.pro/tracker/timeline/lzo/
+    - {{ pin_subpackage('lzo') }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - cmake
+    - make  # [not win]
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/lzo/lzoconf.h                                 # [unix]
+    - test -f ${PREFIX}/lib/liblzo{{ version_major }}.a                       # [unix]
+    - test -f ${PREFIX}/lib/liblzo{{ version_major }}.dylib                   # [osx]
+    - test -f ${PREFIX}/lib/liblzo{{ version_major }}.so                      # [linux]
+
+    - if not exist %PREFIX%\\Library\\include\\lzo\\lzoconf.h exit 1          # [win]
+    - if not exist %PREFIX%\\Library\\lib\\lzo{{ version_major }}.lib exit 1  # [win]
+    - if not exist %PREFIX%\\Library\\lib\\lzo{{ version_major }}_dllimport.lib exit 1  # [win]
+    - if not exist %PREFIX%\\Library\\bin\\lzo{{ version_major }}.dll exit 1  # [win]
+
+    - conda inspect linkages -p $PREFIX {{ name }}                            # [unix]
+    - conda inspect objects -p $PREFIX {{ name }}                             # [osx]
+
+about:
+  home: http://www.oberhumer.com/opensource/lzo/
+  license: GPL v2+
+  license_family: GPL2
+  license_file: COPYING
+  summary: LZO is a portable lossless data compression library written in ANSI C.
+  description: |
+    LZO offers pretty fast compression and extremely fast decompression.
+    MiniLZO is a very lightweight subset of the LZO library.
+
+extra:
+  recipe-maintainers:
+    - rmax

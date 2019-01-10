@@ -1,0 +1,90 @@
+{% set pkg_name = "lz4-c" %}
+{% set author = "lz4" %}
+{% set name = "lz4" %}
+{% set version = "1.8.1.2" %}
+{% set sha256sum = "12f3a9e776a923275b2dc78ae138b4967ad6280863b77ff733028ce89b8123f9" %}
+{% set build = 0 %}
+
+package:
+  name: {{ pkg_name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://github.com/{{ author }}/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: {{ sha256sum }}
+  patches:
+    # fullbench build cause "an internal compiler error".
+    - 0001-Do-not-build-tests-binaries-on-VS-project.patch
+    - 0002-CMake-include-xxhash.c-in-LZ4_CLI_SOURCES-it-is-buil.patch
+    - 0003-CMake-Add-LZ4_DLL_EXPORT-1-LZ4_DLL_IMPORT-1-to-compi.patch
+    - 0004-CMake-VC9-disable-various-warnings-that-trip-up-Wind.patch
+    - 0005-CMake-Add-datagen-executable.patch
+    - 0006-CMake-Set-SHARED-STATIC-IMPORT_LIBRARY_PREFIXes-for-.patch
+    - 0007-Makefile-LDFLAGS-must-appear-after-inputs-when-linking.patch
+    - 0008-CMake-link-the-CLI-programs-statically-to-the-lib-co.patch
+
+build:
+  number: {{ build }}
+  run_exports:
+    # Symbols get removed at minor revs.
+    # https://abi-laboratory.pro/tracker/timeline/lz4/
+    - {{ pin_subpackage('lz4-c', max_pin='x.x') }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - cmake       # [win and vc<14]
+    - jom         # [win and vc<14]
+    - patch       # [unix]
+    - make        # [unix]
+
+test:
+  requires:
+    - pkg-config  # [unix]
+
+  commands:
+    - echo on     # [win]
+    - echo %CD%   # [win]
+    - lz4 -h
+    - lz4c -h     # [unix]
+    - lz4cat -h   # [unix]
+    - unlz4 -h    # [unix]
+
+    - test -f ${PREFIX}/include/lz4.h       # [unix]
+    - test -f ${PREFIX}/include/lz4hc.h     # [unix]
+    - test -f ${PREFIX}/include/lz4frame.h  # [unix]
+
+    - if not exist %LIBRARY_INC%\\lz4.h exit 1       # [win]
+    - if not exist %LIBRARY_INC%\\lz4hc.h exit 1     # [win]
+    - if not exist %LIBRARY_INC%\\lz4frame.h exit 1  # [win]
+
+    - test -f ${PREFIX}/lib/liblz4.a      # [unix]
+    - test -f ${PREFIX}/lib/liblz4.dylib  # [osx]
+    - test -f ${PREFIX}/lib/liblz4.so     # [linux]
+
+    - if not exist %LIBRARY_BIN%\\liblz4.dll exit 1         # [win]
+    - if not exist %LIBRARY_LIB%\\liblz4.lib exit 1         # [win]
+    - if not exist %LIBRARY_LIB%\\liblz4_static.lib exit 1  # [win and vc>=14]
+
+    - test -f ${PREFIX}/lib/pkgconfig/liblz4.pc  # [unix]
+    - pkg-config --cflags --libs liblz4          # [unix]
+
+about:
+  home: https://www.lz4.org
+  license: BSD 2-clause
+  license_file: lib/LICENSE
+  summary: Extremely Fast Compression algorithm
+  description: |
+    LZ4 is lossless compression algorithm, providing compression speed at 400
+    MB/s per core (0.16 Bytes/cycle). It features an extremely fast decoder,
+    with speed in multiple GB/s per core (0.71 Bytes/cycle). A high compression
+    derivative, called LZ4_HC, is available, trading customizable CPU time for
+    compression ratio. LZ4 library is provided as open source software using a
+    BSD license.
+
+extra:
+  recipe-maintainers:
+    - mingwandroid
+    - rmax
+    - wesm

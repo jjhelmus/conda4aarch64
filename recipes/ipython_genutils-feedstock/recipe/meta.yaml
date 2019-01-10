@@ -1,0 +1,43 @@
+{% set version = "0.2.0" %}
+
+package:
+  name: ipython_genutils
+  version: {{ version }}
+
+source:
+  fn: ipython_genutils-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/i/ipython_genutils/ipython_genutils-{{ version }}.tar.gz
+  sha256: eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8
+
+build:
+  number: 0
+  script: python setup.py install
+
+requirements:
+  host:
+    - python
+  run:
+    - python
+
+test:
+  imports:
+    - ipython_genutils
+    - ipython_genutils.testing
+    - ipython_genutils.tests
+
+about:
+  home: http://ipython.org
+  license: BSD 3-Clause
+  license_file: COPYING.md
+  summary: vestigial utilities from IPython
+  description: |
+    General purpose utilities.
+
+extra:
+  recipe-maintainers:
+    - minrk
+    - msarahan
+    - pelson
+    - scopatz
+    - Carreau
+    - takluyver

@@ -1,0 +1,51 @@
+{% set name = "filelock" %}
+{% set version = "3.0.9" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+   fn: {{ name }}-{{ version }}.tar.gz
+   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+   sha256: 97694f181bdf58f213cca0a7cb556dc7bf90e2f8eb9aa3151260adac56701afb
+
+build:
+  #noarch: python
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+
+requirements:
+  host:
+    - pip
+    - python
+
+  run:
+    - python
+
+test:
+  imports:
+    - filelock
+
+about:
+  home: https://github.com/benediktschmitt/py-filelock
+  license: Public Domain
+  license_family: Public-Domain
+  license_file: LICENSE.rst
+  summary: 'A platform independent file lock.'
+  
+  description: |
+    A filelock provides a synchronisation mechanism between different 
+    instances of your application, similar to a thread lock. It can be 
+    used to signalize that files, directories or other resources are 
+    currently used or manipulated (Think of a sync.lock file). Only the 
+    existence of the lockfile is watched for this purpose. The file itself 
+    can not be written and is always empty.
+  doc_url: https://filelock.readthedocs.io/en/latest/
+  dev_url: https://github.com/benediktschmitt/py-filelock
+  doc_source_url: https://github.com/benediktschmitt/py-filelock/tree/master/docs
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - mariusvniekerk

@@ -1,0 +1,86 @@
+{% set version = "2.19.1" %}
+{% set extra_win_ver='1' %}
+
+package:
+  name: git
+  version: {{ version }}
+
+source:
+  - url: https://www.kernel.org/pub/software/scm/git/git-{{ version }}.tar.xz    # [unix]
+    sha256: 345056aa9b8084280b1b9fe1374d232dec05a34e8849028a20bfdb56e920dbb5     # [unix]
+    patches:                                                                     # [unix]
+      - 0001-macOS-Do-not-use-the-system-Wish-urgh.patch                         # [unix]
+  - url: https://github.com/git-for-windows/git/releases/download/v{{ version }}.windows.{{ extra_win_ver }}/MinGit-{{ version }}-busybox-32-bit.zip  # [win32]
+    sha256: 179c7810e6f388e37a6b4073e9cfc2d109598061787dc913b3813b78fecafa97     # [win32]
+  - url: https://github.com/git-for-windows/git/releases/download/v{{ version }}.windows.{{ extra_win_ver }}/MinGit-{{ version }}-busybox-64-bit.zip  # [win64]
+    sha256: aa2c0dd240c9db66a85d8633fb9f90cbcc10cb00c86cc37880bdde691c1362de     # [win64]
+  - url: https://frippery.org/files/busybox/busybox-w32-FRP-2187-g28ade29e9.exe  # [win32]
+    fn: busybox.exe                                                              # [win32]
+  - url: https://frippery.org/files/busybox/busybox64.exe                        # [win64]
+    fn: busybox.exe                                                              # [win64]
+
+build:
+  number: 0
+  # git hardcodes paths to external utilities (e.g. curl)
+  detect_binary_files_with_prefix: True
+
+requirements:
+  build:
+    - {{ compiler('c') }}  # [unix]
+    - autoconf        # [unix]
+    - make            # [unix]
+  host:
+    - perl 5.*        # [unix]
+    - libcurl         # [unix]
+    - expat           # [unix]
+    - libiconv        # [not linux and not win]
+    - openssl         # [unix]
+    - tk              # [unix]
+    - zlib            # [unix]
+  run:
+    - perl 5.*        # [unix]
+
+test:
+  commands:
+    # Verify git location.
+    - test -f $PREFIX/bin/git                               # [unix]
+    - if not exist %LIBRARY_PREFIX%\\bin\\git.exe exit 1    # [win]
+
+    # Run git commands.
+    - git --version
+    - git clone https://github.com/conda-forge/git-feedstock
+    - pushd git-feedstock
+    - git submodule update --init
+    - popd
+
+    # Test that git interactive works
+    - pushd $(mktemp -d 2>/dev/null || mktemp -d -t 'tmp')  # [unix]
+    - git init .                   # [unix]
+    - echo hello > world           # [unix]
+    - git add world                # [unix]
+    - echo goodbye >> world        # [unix]
+    - echo y | git add -p world    # [unix]
+    - popd                         # [unix]
+
+    # test completions
+    - bash $PREFIX/share/bash-completion/completions/git  # [unix]
+
+about:
+  home: https://git-scm.com/
+  license: GPL v2 and LGPL 2.1
+  license_file: LICENSE.txt    # [win]
+  summary: distributed version control system
+  description: |
+    Git is a free and open source distributed version control system designed
+    to handle everything from small to very large projects with speed and
+    efficiency.
+  doc_url: https://git-scm.com/doc
+  dev_url: https://github.com/git/git
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - mingwandroid
+    - msarahan
+    - pelson
+    - scopatz

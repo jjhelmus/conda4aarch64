@@ -1,0 +1,47 @@
+{% set name = "more-itertools" %}
+{% set version = "4.3.0" %}
+{% set compress_type = "tar.gz" %}
+{% set hash_type = "sha256" %}
+{% set hash = "c476b5d3a34e12d40130bc2f935028b5f636df8f372dc2c1c01dc19681b2039e" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.{{ compress_type }}
+  {{ hash_type }}: {{ hash }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - six >=1.0.0,<2.0.0
+
+test:
+  imports:
+    - more_itertools
+    - more_itertools.tests
+
+about:
+  home: https://github.com/erikrose/more-itertools
+  license_file: LICENSE
+  license: MIT
+  license_family: MIT
+  summary: 'More routines for operating on iterables, beyond itertools'
+  description: |
+    more-itertools, additional building blocks, recipes, and routines for
+    working with Python iterables.
+  dev_url: https://github.com/erikrose/more-itertools
+  doc_url: https://more-itertools.readthedocs.io/en/latest/api.html
+
+extra:
+  recipe-maintainers:
+    - pmlandwehr

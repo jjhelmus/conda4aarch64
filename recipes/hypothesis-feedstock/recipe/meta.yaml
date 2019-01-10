@@ -1,0 +1,75 @@
+{% set pkgname = "hypothesis" %}
+{% set version = "3.68.0" %}
+
+package:
+  name: {{ pkgname }}
+  version: {{ version }}
+
+source:
+  # git_url: https://github.com/HypothesisWorks/hypothesis.git
+  # git_tag: {{ version }}
+  url: https://github.com/HypothesisWorks/{{ pkgname }}/archive/{{ pkgname }}-python-{{ version }}.tar.gz
+
+build:
+  script: python hypothesis-python/setup.py install --single-version-externally-managed --record record.txt
+  number: 0
+
+requirements:
+  host:
+    - python
+    - setuptools
+  run:
+    - python
+    - attrs >=16.0.0
+    - coverage
+    - enum34  # [py<34]
+
+{% set pytestcmd = "python -m pytest " %}  
+{% set pytestcmd = "python -m pytest -n 0 " %}  # [py35]
+
+test:
+  source_files:
+    - hypothesis-python/tests
+  requires:
+    - pytest-xdist
+    - numpy
+    - pandas
+    - pytz
+    - faker
+    - mock
+    - flaky
+    - ipaddress  # [py2k]
+  imports:
+    - hypothesis
+    - hypothesis.extra
+    - hypothesis.strategies
+    - hypothesis.stateful
+  commands:
+    - cd hypothesis-python
+    - {{ pytestcmd }} tests/cover
+    - {{ pytestcmd }} tests/datetime
+    - {{ pytestcmd }} tests/fakefactory
+    - {{ pytestcmd }} tests/numpy
+    - {{ pytestcmd }} tests/pandas
+    - {{ pytestcmd }} tests/py2  # [py2k]
+    - {{ pytestcmd }} tests/py3  # [py3k]
+    - {{ pytestcmd }} tests/pytest -p pytester --runpytest subprocess
+
+about:
+  home: http://hypothesis.works
+  license: MPL 2.0
+  license_family: Other
+  summary: 'A library for property based testing'
+  description: |
+      Hypothesis is an advanced testing library for Python. It lets you write
+      tests which are parametrized by a source of examples, and then generates
+      simple and comprehensible examples that make your tests fail. This lets
+      you find more bugs in your code with less work.
+  dev_url: https://github.com/HypothesisWorks/hypothesis-python
+  doc_url: https://hypothesis.readthedocs.io/
+
+extra:
+  recipe-maintainers:
+    - ericmjl
+    - jochym
+    - tadeu

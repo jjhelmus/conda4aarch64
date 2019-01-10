@@ -1,0 +1,34 @@
+From 48fe647692aee43aefd63434c1c1b95e031a6031 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Mon, 9 Apr 2018 23:17:59 +0100
+Subject: [PATCH] macOS: Do not use the system Wish, urgh
+
+---
+ git-gui/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/git-gui/Makefile b/git-gui/Makefile
+index f10caedaa..6a66b54ba 100644
+--- a/git-gui/Makefile
++++ b/git-gui/Makefile
+@@ -103,7 +103,7 @@ else
+ 	TCL_PATH ?= $(dir $(TCLTK_PATH))$(notdir $(subst wish,tclsh,$(TCLTK_PATH)))
+ endif
+ 
+-ifeq ($(uname_S),Darwin)
++ifeq ($(uname_S),Darwin_no_thanks)
+ 	TKFRAMEWORK = /Library/Frameworks/Tk.framework/Resources/Wish.app
+ 	ifeq ($(shell echo "$(uname_R)" | awk -F. '{if ($$1 >= 9) print "y"}')_$(shell test -d $(TKFRAMEWORK) || echo n),y_n)
+ 		TKFRAMEWORK = /System/Library/Frameworks/Tk.framework/Resources/Wish.app
+@@ -155,7 +155,7 @@ else
+ 	endif
+ 	gg_libdir_sed_in := $(gg_libdir)
+ endif
+-ifeq ($(uname_S),Darwin)
++ifeq ($(uname_S),Darwin_no_thanks)
+ 	ifeq ($(shell test -d $(TKFRAMEWORK) && echo y),y)
+ 		GITGUI_MACOSXAPP := YesPlease
+ 	endif
+-- 
+2.15.1 (Apple Git-101)
+

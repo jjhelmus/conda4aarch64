@@ -1,0 +1,27 @@
+From 73381df8666d1a89b6ab3393896117d31a5a9042 Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Sat, 5 May 2018 15:57:33 +0000
+Subject: [PATCH 2/2] Python 3.7 copmat: Rename pexpect async to async_
+
+---
+ tests/test_activate.py |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_activate.py b/tests/test_activate.py
+index 7c20e75..015a842 100644
+--- a/tests/test_activate.py
++++ b/tests/test_activate.py
+@@ -1030,8 +1030,8 @@ class InteractiveShell(object):
+     def sendline(self, s):
+         return self.p.sendline(s)
+ 
+-    def expect(self, pattern, timeout=-1, searchwindowsize=-1, async=False):
+-        return self.p.expect(pattern, timeout, searchwindowsize, async)
++    def expect(self, pattern, timeout=-1, searchwindowsize=-1, async_=False):
++        return self.p.expect(pattern, timeout, searchwindowsize, async_)
+ 
+     def assert_env_var(self, env_var, value, use_exact=False):
+         # value is actually a regex
+-- 
+1.7.1
+

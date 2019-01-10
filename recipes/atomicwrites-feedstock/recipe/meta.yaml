@@ -1,0 +1,43 @@
+{% set name = "atomicwrites" %}
+{% set version = "1.2.1" %}
+{% set hash = "ec9ae8adaae229e4f8446952d204a3e4b5fdd2d099f9be3aaf556120135fb3ee" %}
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0]}}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ hash }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+
+  imports:
+    - atomicwrites
+
+
+
+about:
+  home: https://github.com/untitaker/python-atomicwrites
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: 'Atomic file writes.'
+  dev_url: https://github.com/untitaker/python-atomicwrites
+
+extra:
+  recipe-maintainers:
+    - nicoddemus
+    - tadeu

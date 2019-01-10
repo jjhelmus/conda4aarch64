@@ -1,0 +1,55 @@
+{% set version = "4.4.0" %}
+
+package:
+  name: jupyter_core
+  version: {{ version }}
+
+source:
+  fn: jupyter_core-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/j/jupyter_core/jupyter_core-{{ version }}.tar.gz
+  sha256: ba70754aa680300306c699790128f6fbd8c306ee5927976cbe48adacf240c0b7
+
+build:
+  number: 0
+  script: pip install --no-deps .
+  entry_points:
+    - jupyter = jupyter_core.command:main
+    - jupyter-migrate = jupyter_core.migrate:main
+    - jupyter-troubleshoot = jupyter_core.troubleshoot:main
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+    - traitlets
+
+test:
+  commands:
+    - jupyter -h
+    - jupyter-migrate -h
+    - jupyter-troubleshoot --help
+  imports:
+    - jupyter_core
+    - jupyter_core.utils
+    - jupyter_core.tests
+
+about:
+  home: http://jupyter.org
+  license: BSD 3-clause
+  license_family: BSD
+  license_file: COPYING.md
+  summary: Core common functionality of Jupyter projects.
+  description: |
+    This package defines the core common functionality of Jupyter projects.
+  doc_url: http://jupyter-core.readthedocs.org/
+  doc_source_url: https://github.com/jupyter/jupyter_core/blob/master/docs/index.rst
+  dev_url: https://github.com/jupyter/jupyter_core
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - pelson
+    - minrk
+    - ocefpaf

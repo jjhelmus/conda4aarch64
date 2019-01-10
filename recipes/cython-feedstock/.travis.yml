@@ -1,0 +1,68 @@
+# This file was generated automatically from conda-smithy. To update this configuration,
+# update the conda-forge.yml and/or the recipe/meta.yaml.
+
+language: generic
+
+os: osx
+osx_image: xcode6.4
+
+env:
+  matrix:
+    - CONFIG=osx_c_compilerclangcxx_compilerclangxxpython2.7
+    - CONFIG=osx_c_compilerclangcxx_compilerclangxxpython3.6
+    - CONFIG=osx_c_compilerclangcxx_compilerclangxxpython3.7
+    - CONFIG=osx_c_compilertoolchain_ccxx_compilertoolchain_cxxpython2.7
+    - CONFIG=osx_c_compilertoolchain_ccxx_compilertoolchain_cxxpython3.6
+    - CONFIG=osx_c_compilertoolchain_ccxx_compilertoolchain_cxxpython3.7
+
+  global:
+    # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
+    - secure: "qyUPxKeqHBjnpiu3npAkQUI/IKzYq64YEYCljTXBV/fSY950ajxYrOM9DY7PvYiB6OvP8LLvw5lWhD6pDkWgTb5abNPHbrtv/HfqGa4Tb5GnGsqRZS6F4D/cAVetxR1GSXJKkaIavdDd00cuN8vM4SFNUlZ8+GPAgOlQfxreRrDwi7Loov8RKSZh/AwEqoZnkaAVLhlYNpWZefXjzB55aPhZcx/1C72IIhO0ObQcEwLoTWxCaCMpYJpZegnKIGJZ6ombrsQ42TJ/Xmoz4Km1pPU+UM08zboQY59ycjnUPWf2bjjKpIk98UR/FKyKei3vtreYnUUum0OMbdXqLXAcET9BSLuZum9d91VAS0ohC/e5WcB/83wSM5NUjRVl9Fo7/4LLfpGy8r3cp3kNdc+wV8IAr/yE7k4SHciLnYSLmRG/VBiAsv1H2j+NCI0aSXgh5lJl2tK4UDkxL4R3N6ihT6ZWEAvuKyBFLEDj3QmvQUbjAcaWFi6aXdwH47LimQ6Ca1FN+FBV106l2OaFidSz2uFeN/44w6pZeCEWlRJOsk4I1ZWpuDf5MQbzV4IPZsjSOEF7mjPCQLALysHwy6pDOlsVJqcZmyEyVjSLjZ477Acy344k8tGp8IRI88v5QbNcBgCqviLCjXrUbRVIc5+66rAHMILy0zURmhjyQwj4d44="
+
+
+before_install:
+    # Fast finish the PR.
+    - |
+      (curl https://raw.githubusercontent.com/conda-forge/conda-forge-ci-setup-feedstock/branch2.0/recipe/conda_forge_ci_setup/ff_ci_pr_build.py | \
+          python - -v --ci "travis" "${TRAVIS_REPO_SLUG}" "${TRAVIS_BUILD_NUMBER}" "${TRAVIS_PULL_REQUEST}") || exit 1
+
+    # Remove homebrew.
+    - |
+      echo ""
+      echo "Removing homebrew from Travis CI to avoid conflicts."
+      curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall > ~/uninstall_homebrew
+      chmod +x ~/uninstall_homebrew
+      ~/uninstall_homebrew -fq
+      rm ~/uninstall_homebrew
+
+
+install:
+    # Install Miniconda.
+    - |
+      echo ""
+      echo "Installing a fresh version of Miniconda."
+      MINICONDA_URL="https://repo.continuum.io/miniconda"
+      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
+      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
+      bash $MINICONDA_FILE -b
+
+    # Configure conda.
+    - |
+      echo ""
+      echo "Configuring conda."
+      source /Users/travis/miniconda3/bin/activate root
+
+      conda install --yes --quiet conda-forge::conda-forge-ci-setup=2
+      setup_conda_rc ./ ./recipe ./.ci_support/${CONFIG}.yaml
+
+      source run_conda_forge_build_setup
+
+    # compiler cleanup
+    - |
+      mangle_compiler ./ ./recipe ./.ci_support/${CONFIG}.yaml
+
+script:
+  # generate the build number clobber
+  - make_build_number ./ ./recipe ./.ci_support/${CONFIG}.yaml
+  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --clobber-file ./.ci_support/clobber_${CONFIG}.yaml
+  - upload_package ./ ./recipe ./.ci_support/${CONFIG}.yaml

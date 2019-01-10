@@ -1,0 +1,149 @@
+{% set base_version = "3.7.0" %}
+{% set version = "3.7.0" %}
+{% set md5 = "eb8c2a6b1447d50813c02714af4681f3" %}
+{% set linkage_nature = os.environ.get('PY_INTERP_LINKAGE_NATURE', '') %}
+{% if linkage_nature != '' %}
+  {% set linkage_nature = "_" ~ linkage_nature %}
+{% endif %}
+
+package:
+  name: python
+  # We cannot use 3.7.0b5 here as that is < 3.7.0 and python-3.7.0 dependent packages
+  # will not be installable (they will have a constraint of >=3.7.0,<=3.8.0a0).
+  version: {{ base_version }}
+
+source:
+  - url: https://www.python.org/ftp/python/{{ base_version }}/Python-{{ version }}.tar.xz
+  # - url: https://www.python.org/ftp/python/{{ base_version }}/Python-{{ version }}.tgz
+    md5: {{ md5 }}
+    patches:
+      - 0001-Add-Anaconda-Distribution-version-logic.patch
+      - 0002-Darwin-Add-arch-x86_64-to-UnicCCompiler-ld_args.patch
+      - 0003-Win32-distutils-Also-look-for-executable.bat.patch
+      # Removed because this breaks conda activate and deactivate.
+      # - 0004-Win32-Ensure-Library-bin-is-in-os.environ-PATH.patch
+      - 0005-Win32-Change-FD_SETSIZE-from-512-to-2048.patch
+      - 0006-Win32-distutils-Add-support-to-cygwinccompiler-for-V.patch
+      - 0007-Do-not-pass-g-to-GCC-when-not-Py_DEBUG.patch
+      - 0008-Support-cross-compiling-byte-code.patch
+      - 0009-Win32-Fixes-for-Windows-GCC-interop-needed-by-RPy2-a.patch
+      - 0010-Darwin-Look-in-sysroot-usr-lib-include-if-sysroot-is.patch
+      - 0011-runtime_library_dir_option-Use-1st-word-of-CC-as-com.patch
+      - 0012-Win32-Do-not-download-externals.patch
+      - 0013-Add-support-for-_CONDA_PYTHON_SYSCONFIGDATA_NAME-if-.patch
+      - 0014-Fix-find_library-so-that-it-looks-in-sys.prefix-lib-.patch
+      - 0015-Disable-new-dtags-in-unixccompiler.py.patch
+      - 0016-Switch-from-WinSDK-10.0.17134.0-to-10.0.16299.0.patch
+      - 0017-Fix-cross-compilation-on-Debian-based-distros.patch
+  # TODO :: Depend on our own packages for these:
+  - url: https://github.com/python/cpython-source-deps/archive/xz-5.2.2.zip          # [win]
+    folder: externals/xz-5.2.2                                                       # [win]
+    sha256: 02b6d6f1e0369940e7e1f0d324992e069d09f5f3d32d86e2d22cd8b82ac3fb3f         # [win]
+  # Not used as of 3.7b3 (tcltk from cpython-bin- is), but kept for archival and license reasons.
+  - url: https://github.com/python/cpython-source-deps/archive/tcl-core-8.6.8.0.zip  # [win]
+    folder: externals/tcl-core-8.6.8.0                                               # [win]
+    sha256: 91fd3ea97f7fddbd45591fd91961b6be6434b6d338ae54ad16f40efe53295be2         # [win]
+  # Not used as of 3.7b3 (tcltk from cpython-bin- is), but kept for archival and license reasons.
+  - url: https://github.com/python/cpython-source-deps/archive/tk-8.6.8.0.zip        # [win]
+    folder: externals/tk-8.6.8.0                                                     # [win]
+    sha256: 584fbfdc3cd4427d44ae7ba1e829966d30aaee2a36feb02e3714ac97b48983c1         # [win]
+  - url: https://github.com/python/cpython-bin-deps/archive/tcltk-8.6.8.0.zip        # [win]
+    folder: externals/tcltk-8.6.8.0                                                  # [win]
+    sha256: 63a28d9112d47f5ca9970593fda7fca8c22e911450d8036e033bba376500acd9         # [win]
+  - url: https://github.com/python/cpython-source-deps/archive/tix-8.4.3.6.zip       # [win]
+    folder: externals/tix-8.4.3.6                                                    # [win]
+    sha256: e558e3dc5e67ac0942f8fceafce00ca46b177da9ebeaf38ec7fafd9b9913ac56         # [win]
+  - url: https://github.com/python/cpython-source-deps/archive/sqlite-3.21.0.0.zip   # [win]
+    folder: externals/sqlite-3.21.0.0                                                # [win]
+    sha256: 95a4f2d76aeeb68b51239340e3de26e5714ecfb7c8ad82a67b17af82213a8c20         # [win]
+  # Not used as of 3.7b3 (openssl-bin is), but kept for archival and license reasons.
+  - url: https://github.com/python/cpython-source-deps/archive/openssl-1.1.0h.zip    # [win]
+    folder: externals/openssl-1.1.0h                                                 # [win]
+    sha256: 65facaa26aad903889f1ef8e4d14542a0c0d142940a8cf47d6f57516fba6a41f         # [win]
+  - url: https://github.com/python/cpython-bin-deps/archive/openssl-bin-1.1.0h.zip   # [win]
+    folder: externals/openssl-bin-1.1.0h                                             # [win]
+    sha256: 8388d90b06b878a7fd980a46264d2d2aca2900ce36dd6834cf85861921534c35         # [win]
+  - url: https://github.com/python/cpython-source-deps/archive/bzip2-1.0.6.zip       # [win]
+    folder: externals/bzip2-1.0.6                                                    # [win]
+    sha256: c42fd1432a2667b964a74bc423bb7485059c4a6d5dc92946d59dbf9a6bdb988d         # [win]
+  - url: https://github.com/python/cpython-source-deps/archive/zlib-1.2.11.zip       # [win]
+    folder: externals/zlib-1.2.11                                                    # [win]
+    sha256: debb1952945fa6c25817a40abe90641b572c83171f244937b70b9fe156f5a63a         # [win]
+  - url: https://github.com/python/cpython-bin-deps/archive/nasm-2.11.06.zip         # [win]
+    folder: externals/nasm-2.11.06                                                   # [win]
+    sha256: de3c87b26a80e789986d8e6950c6304175d3829afe9c6c7211eb7257266ab0ac         # [win]
+
+
+build:
+  number: 3
+  # Windows has issues updating python if conda is using files itself.
+  # Copy rather than link.
+  no_link:
+    - DLLs/_ctypes.pyd  # [win]
+  # We delete the shared libraries.
+  ignore_run_exports:   # [unix]
+    - bzip2             # [unix]
+  # match python.org compiler standard
+  skip: True            # [win and vc != 14]
+# Would like to be able to append to the calculated build string here, ping @msarahan, is this possible?
+# Also this messes up hash generation so package ends up without any :-(
+# {% if linkage_nature != '' %}
+#   string: {{ version }}{{ linkage_nature }}
+# {% endif %}
+#  script_env:
+#    - PY_INTERP_LINKAGE_NATURE
+#    - python_branding
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
+    - {{ cdt('libx11-devel') }}          # [linux]
+    - make                               # [unix]
+    - pkg-config                         # [unix]
+  host:
+    - bzip2                              # [unix]
+    - sqlite                             # [unix]
+    - xz                                 # [unix]
+    - zlib                               # [unix]
+    - openssl                            # [unix]
+    - readline                           # [unix]
+    - tk                                 # [unix]
+    - ncurses                            # [unix]
+    - libffi                             # [unix]
+
+test:
+  commands:
+    - python -V
+    - python3 -V            # [unix]
+    - 2to3 -h
+    - pydoc -h
+    - python3-config --help  # [unix]
+    - python -c "import sysconfig; print(sysconfig.get_config_var('CC'))"
+    -  _CONDA_PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_x86_64_conda_cos6_linux_gnu python -c "import sysconfig; print(sysconfig.get_config_var('CC'))"  # [linux64]
+
+about:
+  home: http://www.python.org/
+  license: PSF
+  license_file: LICENSE
+  summary: General purpose programming language
+  description: |
+    Python is a widely used high-level, general-purpose, interpreted, dynamic
+    programming language. Its design philosophy emphasizes code
+    readability, and its syntax allows programmers to express concepts in
+    fewer lines of code than would be possible in languages such as C++ or
+    Java. The language provides constructs intended to enable clear programs
+    on both a small and large scale.
+  doc_url: https://www.python.org/doc/versions/
+  doc_source_url: https://github.com/python/pythondotorg/blob/master/docs/source/index.rst
+  dev_url: https://docs.python.org/devguide/
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - jjhelmus
+    - mingwandroid
+    - msarahan
+    - pelson
+    - ocefpaf

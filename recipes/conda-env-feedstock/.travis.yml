@@ -1,0 +1,37 @@
+# This file was generated automatically from conda-smithy. To update this configuration,
+# update the conda-forge.yml and/or the recipe/meta.yaml.
+
+language: generic
+
+os: osx
+osx_image: beta-xcode6.1
+
+env:
+  global:
+    # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
+    - secure: "DjT1h7iwrnkvzU0TlwekHfj4kf0MJCfhYtcDQwG77gmWdIZuNOg7aVUoY4NW4faLGu9mo9sx2GyZnSj0H7qa0TFPMSq/nNU3POHXB9GKe2ArwNbVzQ2BWvlTJ4v39QEELnxVUb9iMlPQlZAV3nnBOQOMU/8roBalWxasUzQlcdn5X0XxXMTHsNdovDmBh8eMumb5bcHAwXjUz+mP5v4hL5WcmCq+niGhxf7N22iSFoyDh+mezxFOU29UWEON9jvexGBsn0rzlFDvFwoOsDty+sD2u1njZjD5igB9nZyipTH3UP2Yl3IapcuN6H4zQBOIBbAJ2WphGm6hdFkVsMdke7lwUyRtkO50PTeK5YONrk3EJ1iE57D/DvDIlay3D1g7wnPepWAduI1W/6pwbBvCr6ohQE96WlhQx/+bN5bIcqo+HtAUd0+jr2EkagrWXVlWaQw1/PDE9gIWaxiVaeJwS+e50odnCKrQ6BYpz58yKEbvN4fFXKBaa0e9zRLTJpzj3eWuobRHRG4n4ls0+5aS1CVa02p90kuZ3LccseY+fzifSHIJlbFMEbBipOqGADokFZTcq/0vdoWSeSEiUSrQgOAEuhV5lObgQs39v5TWphGg05JQHVwF93u6EUCP3v+yFz2WnSNwgPusYTWAyri5+Ha7TrrEj1iCJctq7MbrAUo="
+
+
+before_install:
+    # Remove homebrew.
+    - brew remove --force $(brew list)
+    - brew cleanup -s
+    - rm -rf $(brew --cache)
+
+install:
+    - |
+      MINICONDA_URL="https://repo.continuum.io/miniconda"
+      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
+      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
+      bash $MINICONDA_FILE -b
+
+      source /Users/travis/miniconda3/bin/activate root
+      conda config --add channels conda-forge
+      conda config --set show_channel_urls true
+      conda install --yes --quiet conda-forge-build-setup
+      source run_conda_forge_build_setup
+
+script:
+  - conda build ./recipe
+
+  - upload_or_check_non_existence ./recipe conda-forge --channel=main

@@ -1,0 +1,27 @@
+From fe9dc32b1fbe4c0f372dd6a0c4971a6def9c6bca Mon Sep 17 00:00:00 2001
+From: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date: Sat, 20 Jan 2018 10:13:15 -0500
+Subject: [PATCH] Relax open fds count for deep-directories
+
+With 32 open fd limit, the deep-directories test fails with:
+**** Can't create temporary file 1/2/3/4/5/6/7/8/9/foo.oH4Kd9g : Too many open files
+---
+ tests/deep-directories | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/deep-directories b/tests/deep-directories
+index 4698842..72a7ef7 100755
+--- a/tests/deep-directories
++++ b/tests/deep-directories
+@@ -14,7 +14,7 @@ use_tmpdir
+ # Exercise the directory file descriptor cache
+ 
+ # Artificially limit to 8 cache entries
+-ulimit -n 32 > /dev/null 2>&1 || exit 77
++ulimit -n 76 > /dev/null 2>&1 || exit 77
+ 
+ cat > ab.diff <<EOF
+ --- /dev/null
+-- 
+1.8.3.1
+

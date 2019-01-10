@@ -1,0 +1,51 @@
+# This file was generated automatically from conda-smithy. To update this configuration,
+# update the conda-forge.yml and/or the recipe/meta.yaml.
+
+language: generic
+
+os: osx
+osx_image: xcode6.4
+
+env:
+  global:
+    # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
+    - secure: "ZP3oX68tfKi2PyQXTVIGcm9CUL0W7yWpThGACBRth5R5qE7sJV5gqgUwb0oL9JtwPfpRuFWmd06NqwJPYzIe714/I2RHW3JSqe0XOHN5snRzGdznq6L/VcaaiWvA6z9eumJRajTA608Lz2dRJx5S0iext1UINyfpFbkAnkzcg2A679+09CJHPM0mP7M6gKaj80cIA0et2Y+LCtUMcU1x6ezOi4D2FA2d+o3kCHgMG7b2yUt2Vkny9ifoku7bgdc3IhzXeGgWsHi+9OQFCtEIkBcWWPnvL3uXsMBTkr762lNhnu4grsSkUtivWVgX7aMj5ijlsO6/EcEXkobdZnS9tjZLBs5XowClpnqNcEAANlFZg0rgGYdQg7T9+ZasQFUKjZb1mVQh2fpyUvSGm43VSIJ+0cyhmojDHtkw+BmdbRwQWilKzglFenrDP7x6F9M5q+Sse0eZmW2A3+xQEvKpa8niFoHbgWxCZmpGaM0k335SWESHgixvEUK3o/QoWtTraZBJb6c8czu5jXb5gbMs3YU1VazUYS/u1r6knScW0EyR3CmeouqgbtuJX/8MjfXggUMfpbPFnJ3qlTgIihMmWDjEiwt1eDUC7RjBCbFgqgya80q79z3zWxwPC9AQmuOlIHgT1v392HFi3zXWtJan25W1UURn9ZzdiV5EpcD+fAU="
+
+
+before_install:
+    # Remove homebrew.
+    - |
+      echo ""
+      echo "Removing homebrew from Travis CI to avoid conflicts."
+      curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall > ~/uninstall_homebrew
+      chmod +x ~/uninstall_homebrew
+      ~/uninstall_homebrew -fq
+      rm ~/uninstall_homebrew
+
+
+install:
+    # Install Miniconda.
+    - |
+      echo ""
+      echo "Installing a fresh version of Miniconda."
+      MINICONDA_URL="https://repo.continuum.io/miniconda"
+      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
+      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
+      bash $MINICONDA_FILE -b
+
+    # Configure conda.
+    - |
+      echo ""
+      echo "Configuring conda."
+      source /Users/travis/miniconda3/bin/activate root
+      conda config --remove channels defaults
+      conda config --add channels defaults
+      conda config --add channels conda-forge
+      conda config --set show_channel_urls true
+      conda install --yes --quiet conda-forge-build-setup
+      source run_conda_forge_build_setup
+
+script:
+  - conda build ./recipe
+
+  - upload_or_check_non_existence ./recipe conda-forge --channel=main

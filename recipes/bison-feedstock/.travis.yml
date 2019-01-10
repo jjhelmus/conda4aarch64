@@ -1,0 +1,48 @@
+# This file was generated automatically from conda-smithy. To update this configuration,
+# update the conda-forge.yml and/or the recipe/meta.yaml.
+
+language: generic
+
+os: osx
+osx_image: beta-xcode6.1
+
+env:
+  matrix:
+    
+    - CONDA_PERL=5.20.3.1
+  global:
+    # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
+    - secure: "BQqDQtcPcHMaIsZE6SlOBeHlzrV91K+4Rb+cI2+zPbTIh/p2F1WsgHtsmUbKwuHNlEQn7ta8B1A6zciitis7yl2gFxnCAU5H/LZTkSFY9tXvsV2oL5tc1C+6vadfbvI6XImsckGaRhrYIy4AlqK+y2qqYf9C1seR/1JjuFqs1Zcoo99J+ZacFjqV81MUP68IFVgj9ykAPkzM2+hlq/oGrcVCULwtLC5pRk5d6XdRaR1YiDOrbdm1VbagHaEZ6z2y3da1BUxfxsLQA7ybcXXbILu/HsxWn1t0fD2sGRnblAb4oOO+DycZJ7FPD69q6UipzJ5IBtmFa4L8SrQmRqVAgi+Bn88+vqzj07nDrMy/ouN6IVDZsKH7L3lt9e1/y2nBATPzosv1H4p2HLojfZSPYRaqCqqwn+SQMfczSfBM0Swst4p60rxiTDeqR34fqiSUqYrEenUMvykJwyDAvRu9vIGmfKiHnZIkewpNLhP5/nAQFhyIeUWctczOvXteXtfR3DEpXVwEge3idi55s5JQZC3oYdd0CAsK+jwrXvbPrqD85Z6qa/Z7CsNl9wNs/NbyQjBm5aA4eDmzJhKPIz7y+s5xxA+mQ0Og28konXZ2TseTvyYs4iGz6VKmk+dY22OU/L1hOCAxC8GujVHr6yMnWzWRSw+VxLBnnd1pE8X5pU4="
+
+
+before_install:
+    # Remove homebrew.
+    - brew remove --force $(brew list)
+    - brew cleanup -s
+    - rm -rf $(brew --cache)
+
+install:
+    - |
+      MINICONDA_URL="https://repo.continuum.io/miniconda"
+      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
+      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
+      bash $MINICONDA_FILE -b
+
+      source /Users/travis/miniconda3/bin/activate root
+      conda config --add channels conda-forge
+      conda config --set show_channel_urls true
+      conda install --yes --quiet conda-forge-build-setup
+      source run_conda_forge_build_setup
+
+      # install conda-build 2.x to build with a long prefix
+      conda install --yes --quiet conda-build=2
+      conda info
+
+script:
+  # Use the default channel as a provider of long prefix packages
+  - conda build -c defaults ./recipe
+
+  - upload_or_check_non_existence ./recipe conda-forge --channel=main
+
+# inspect the prefix lengths of the built packages
+  - conda inspect prefix-lengths /Users/travis/miniconda3/conda-bld/osx-64/*.tar.bz2

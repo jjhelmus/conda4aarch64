@@ -1,0 +1,40 @@
+{% set version = "1.4.0" %}
+
+package:
+  name: pkgconfig
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/p/pkgconfig/pkgconfig-{{ version }}.tar.gz
+  sha256: 048c3b457da7b6f686b647ab10bf09e2250e4c50acfe6f215398a8b5e6fcdb52
+
+build:
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+
+requirements:
+  host:
+    - python
+    - pip
+    - nose >=1.0
+  run:
+    - python
+    - pkg-config        # [unix]
+    - m2w64-pkg-config  # [win]
+
+test:
+  imports:
+    - pkgconfig
+
+about:
+  home: https://github.com/matze/pkgconfig
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: 'A Python interface to the pkg-config command line tool'
+
+extra:
+  recipe-maintainers:
+    - jakirkham
+    - lbdreyer
+    - ocefpaf

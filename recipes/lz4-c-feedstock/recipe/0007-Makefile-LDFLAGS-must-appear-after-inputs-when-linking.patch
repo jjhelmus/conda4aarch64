@@ -1,0 +1,29 @@
+--- work.orig/programs/Makefile	2018-04-23 13:46:38.000000000 +0000
++++ work/programs/Makefile	2018-04-23 13:47:17.000000000 +0000
+@@ -50,7 +50,7 @@
+             -Wswitch-enum -Wdeclaration-after-statement -Wstrict-prototypes \
+             -Wpointer-arith -Wstrict-aliasing=1
+ CFLAGS   += $(DEBUGFLAGS) $(MOREFLAGS)
+-FLAGS     = $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
++FLAGS     = $(CFLAGS) $(CPPFLAGS)
+ 
+ LZ4_VERSION=$(LIBVER)
+ MD2ROFF   = ronn
+@@ -76,7 +76,7 @@
+ all32: all
+ 
+ lz4: $(OBJFILES)
+-	$(CC) $(FLAGS) $^ -o $@$(EXT)
++	$(CC) $(FLAGS) $^ $(LDFLAGS) -o $@$(EXT)
+ 
+ lz4-release: DEBUGFLAGS=
+ lz4-release: lz4
+@@ -86,7 +86,7 @@
+ 
+ lz4c32: CFLAGS += -m32
+ lz4c32 : $(SRCFILES)
+-	$(CC) $(FLAGS) $^ -o $@$(EXT)
++	$(CC) $(FLAGS) $^ $(LDFLAGS) -o $@$(EXT)
+ 
+ lz4.1: lz4.1.md $(LIBVER_SRC)
+ 	cat $< | $(MD2ROFF) $(MD2ROFF_FLAGS) | sed -n '/^\.\\\".*/!p' > $@

@@ -1,0 +1,26 @@
+From 75639d032181ef4312d62e6eab914ad2e5bf8c9a Mon Sep 17 00:00:00 2001
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Sat, 5 May 2018 15:17:45 +0000
+Subject: [PATCH 1/2] Python 3.7 compat: "SyntaxError: Generator expression must be parenthesized"
+
+See: https://bugs.python.org/issue32012
+---
+ conda/_vendor/toolz/functoolz.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/conda/_vendor/toolz/functoolz.py b/conda/_vendor/toolz/functoolz.py
+index 2bd80a4..f7ffb31 100644
+--- a/conda/_vendor/toolz/functoolz.py
++++ b/conda/_vendor/toolz/functoolz.py
+@@ -498,7 +498,7 @@ class Compose(object):
+     def __name__(self):
+         try:
+             return '_of_'.join(
+-                f.__name__ for f in reversed((self.first,) + self.funcs),
++                [f.__name__ for f in reversed((self.first,) + self.funcs)],
+             )
+         except AttributeError:
+             return type(self).__name__
+-- 
+1.7.1
+
