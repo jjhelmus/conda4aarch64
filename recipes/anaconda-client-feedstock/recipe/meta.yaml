@@ -1,0 +1,65 @@
+{% set name = "anaconda-client" %}
+{% set version = "1.6.14" %}
+{% set checksum = "53da4fae0504257ccfc1961532c518b80cecc82cb7d48b8406e9d2f0e0d1518b" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://github.com/Anaconda-Platform/anaconda-client/archive/{{ version }}.tar.gz
+  sha256: {{ checksum }}
+
+build:
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+  entry_points:
+    - anaconda = binstar_client.scripts.cli:main
+    - binstar = binstar_client.scripts.cli:main
+    - conda-server = binstar_client.scripts.cli:main
+
+requirements:
+  host:
+    - python
+    - pip
+
+  run:
+    - python
+    - setuptools
+    - clyent >=1.2.0
+    - nbformat >=4.4.0
+    - pyyaml >=3.12
+    - python-dateutil >=2.6.1
+    - pytz
+    - requests >=2.9.1
+    - six
+
+test:
+  imports:
+    - binstar_client
+    - binstar_client.commands
+    - binstar_client.inspect_package
+    - binstar_client.inspect_package.tests
+    - binstar_client.mixins
+    - binstar_client.scripts
+    - binstar_client.tests
+    - binstar_client.utils
+    - binstar_client.utils.notebook
+    - binstar_client.utils.notebook.tests
+
+  commands:
+    - anaconda --help
+    - binstar --help
+    - conda-server --help
+
+about:
+  home: https://github.com/Anaconda-Platform/anaconda-client
+  license: BSD 3-Clause
+  license_family: BSD
+  license_file: LICENSE.md
+  summary: Anaconda Cloud command line client library
+
+extra:
+  recipe-maintainers:
+    - jakirkham
