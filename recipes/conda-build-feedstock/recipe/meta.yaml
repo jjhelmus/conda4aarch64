@@ -1,6 +1,6 @@
 {% set name = "conda-build" %}
-{% set version = "3.16.0" %}
-{% set sha256 = "31b2e99a3c7c3a5ab5a6d4d9261b13a9788ac1389107d6faa2998a9420501913" %}
+{% set version = "3.17.6" %}
+{% set sha256 = "6378fa0335016b1e4a355521b352dafdafdf0f0cb223fcd730fae516f59c23f6" %}
 
 package:
   name: {{ name }}
@@ -16,6 +16,7 @@ build:
   entry_points:
     - conda-build = conda_build.cli.main_build:main
     - conda-convert = conda_build.cli.main_convert:main
+    - conda-debug = conda_build.cli.main_debug:main
     - conda-develop = conda_build.cli.main_develop:main
     - conda-index = conda_build.cli.main_index:main
     - conda-inspect = conda_build.cli.main_inspect:main
@@ -45,6 +46,7 @@ requirements:
     - psutil
     - python
     - python-libarchive-c
+    - py-lief       # [not win]
     - pytz
     - pyyaml
     - scandir            # [py27]
@@ -79,6 +81,8 @@ test:
     - conda-convert -h
     - type -P conda-develop  # [unix]
     - where conda-develop  # [win]
+    - type -P conda-debug  # [unix]
+    - where conda-debug  # [win]
     - conda-develop -h
     - type -P conda-index  # [unix]
     - where conda-index  # [win]
