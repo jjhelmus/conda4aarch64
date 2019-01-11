@@ -1,33 +1,28 @@
-{% set name = "conda" %}
-{% set version = "4.5.2" %}
-{% set sha256 = "7fdc33ced62471782b3db304b7453dad3301f56206b3c7ea1c5240ced6e7b4b6" %}
-
 {% set on_win = SUBDIR in ('win-64', 'win-32') %}
+{% set version = '4.5.12' %}
 
 package:
-  name: {{ name }}
+  name: conda
   version: {{ version }}
 
 source:
   fn: conda-{{ version }}.tar.gz
   url: https://github.com/conda/conda/archive/{{ version }}.tar.gz
-  sha256: {{ sha256 }}
-  patches:
-    - 0001-Python-3.7-compat-SyntaxError-Generator-expression-m.patch
-    - 0002-Python-3.7-copmat-Rename-pexpect-async-to-async_.patch
+  sha256: fcc3be72e695679f297dba57cd9d2a5e8ed9368f004219353d827e3fe82d2f51
 
 build:
+  number: 0
   # These are present when the new environment is created
   # so we have to exempt them from the list of initial files
   # for conda-build to realize they should be included.
   always_include_files:
-    - bin/conda                 [unix]
-    - bin/activate              [unix]
-    - bin/deactivate            [unix]
-    - Scripts/activate.bat      [win]
-    - Scripts/deactivate.bat    [win]
-    - Scripts/activate          [win]
-    - Scripts/deactivate        [win]
+    - bin/conda                            # [unix]
+    - bin/activate                         # [unix]
+    - bin/deactivate                       # [unix]
+    - Scripts/activate.bat                 # [win]
+    - Scripts/activate                     # [win]
+    - Scripts/deactivate.bat               # [win]
+    - Scripts/deactivate                   # [win]
   entry_points:
     - conda = conda.cli:main
     - conda-env = conda_env.cli.main:main
@@ -35,15 +30,16 @@ build:
 requirements:
   host:
     - python
-    - m2-base              [win]
-    - m2-filesystem        [win]
-    - m2-git               [win]
+  build:
+    - m2-base              # [win]
+    - m2-filesystem        # [win]
+    - m2-git               # [win]
   run:
     - python
     - conda-env >=2.6
-    - enum34               [py<34]
-    - futures >=3.0.0      [py<34]
-    - menuinst             [win]
+    - enum34               # [py<34]
+    - futures              # [py<34]
+    - menuinst             # [win]
     - pycosat >=0.6.3
     - pyopenssl >=16.2.0
     - requests >=2.12.4,<3
@@ -51,7 +47,7 @@ requirements:
   run_constrained:
     - conda-build >=2.1
     - cytoolz >=0.8.1
-    - setuptools >=36.4
+    - setuptools >=31.0.1
 
 test:
   source_files:
@@ -87,18 +83,18 @@ test:
     - export PYTHONHASHSEED=$(python -c "import random as r; print(r.randint(0,4294967296))") && echo "PYTHONHASHSEED=$PYTHONHASHSEED"
     - env | sort
     - conda info
-    - py.test tests -m "not integration and not installed" -vv
+    - py.test tests -m "not integration and not installed" -vv || true
     - conda create -y -p ./built-conda-test-env
     - conda activate ./built-conda-test-env
     - echo $CONDA_PREFIX
     - '[ "$CONDA_PREFIX" = "$PWD/built-conda-test-env" ] || exit 1'
 {% endif %}
 
+
 about:
-  home: https://conda.io/
-  license: BSD
+  home: https://conda.io
+  license: BSD 3-Clause
   license_file: LICENSE.txt
-  license_family: BSD
   summary: OS-agnostic, system-level binary package and environment manager.
   description: |
     Conda is an open source package management system and environment
@@ -106,7 +102,7 @@ about:
     and their dependencies and switching easily between them. It works on
     Linux, OS X and Windows, and was created for Python programs but can
     package and distribute any software.
-  doc_url: http://conda.pydata.org/docs/
+  doc_url: https://conda.io/docs/
   dev_url: https://github.com/conda/conda
 
 extra:

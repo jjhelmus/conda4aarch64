@@ -13,5 +13,7 @@ FOR /F "delims=" %%i IN ('cygpath.exe -u "%STDLIB_DIR%"') DO set "STDLIB_DIR=%%i
 set MSYSTEM=MINGW%ARCH%
 set MSYS2_PATH_TYPE=inherit
 set CHERE_INVOKING=1
-bash -lc ". utils/functions.sh && install_conda_full"
+echo %PKG_VERSION% > conda\.version
+FOR /F "delims=" %%i IN ('python -c "import sys; print(str(sys.version_info.major) + \".\" + str(sys.version_info.minor))"') DO set "PYTHON_VERSION=%%i"
+bash -lxc ". utils/functions.sh && install_conda_full %PREFIX% %PYTHON_VERSION%"
 if errorlevel 1 exit 1
