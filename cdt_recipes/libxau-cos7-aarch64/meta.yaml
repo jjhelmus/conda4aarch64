@@ -9,11 +9,16 @@ source:
   - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libXau-1.0.8-2.1.el7.src.rpm
     folder: source
 
+build:
+  missing_dso_whitelist:
+    - '*'
+
 
 
 outputs:
   - name: libxau-cos7-aarch64
-    noarch: generic
+    build:
+      noarch: generic
 
     about:
       home: http://www.x.org

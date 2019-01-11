@@ -1,22 +1,27 @@
 package:
   name: libxcb-cos7-aarch64
-  version: 1.12
+  version: 1.13
 
 source:
-  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libxcb-1.12-1.el7.aarch64.rpm
-    sha256: a9b15723a3787b5aba0624d36f3a608d38974ce467c0f0149c34905711db71f3
+  - url: http://mirror.centos.org/altarch/7/os/aarch64/Packages/libxcb-1.13-1.el7.aarch64.rpm
+    sha256: 723c1a24b8c4638414796e67f446b519a002df5e0481e106da845e684a40614e
     folder: binary
-  - url: http://vault.centos.org/7.4.1708/os/Source/SPackages/libxcb-1.12-1.el7.src.rpm
+  - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libxcb-1.13-1.el7.src.rpm
     folder: source
+
+build:
+  missing_dso_whitelist:
+    - '*'
 
 
 
 outputs:
   - name: libxcb-cos7-aarch64
-    noarch: generic
+    build:
+      noarch: generic
 
     about:
-      home: http://xcb.freedesktop.org/
+      home: https://xcb.freedesktop.org/
       license: MIT
       license_family: MIT
       summary: "(CDT) A C binding to the X11 protocol"

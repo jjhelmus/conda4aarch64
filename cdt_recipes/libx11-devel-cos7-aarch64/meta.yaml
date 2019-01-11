@@ -9,6 +9,10 @@ source:
   - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libX11-1.6.5-2.el7.src.rpm
     folder: source
 
+build:
+  missing_dso_whitelist:
+    - '*'
+
 requirements:
   build:
     - libx11-cos7-aarch64 ==1.6.5
@@ -16,7 +20,8 @@ requirements:
 
 outputs:
   - name: libx11-devel-cos7-aarch64
-    noarch: generic
+    build:
+      noarch: generic
     requirements:
       run:
         - libx11-cos7-aarch64 ==1.6.5

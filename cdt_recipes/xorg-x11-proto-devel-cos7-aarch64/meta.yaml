@@ -9,11 +9,16 @@ source:
   - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/xorg-x11-proto-devel-2018.4-1.el7.src.rpm
     folder: source
 
+build:
+  missing_dso_whitelist:
+    - '*'
+
 
 
 outputs:
   - name: xorg-x11-proto-devel-cos7-aarch64
-    noarch: generic
+    build:
+      noarch: generic
 
     about:
       home: https://www.x.org

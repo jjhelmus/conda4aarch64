@@ -9,11 +9,16 @@ source:
   - url: http://vault.centos.org/7.6.1810/os/Source/SPackages/libX11-1.6.5-2.el7.src.rpm
     folder: source
 
+build:
+  missing_dso_whitelist:
+    - '*'
+
 
 
 outputs:
   - name: libx11-common-cos7-aarch64
-    noarch: generic
+    build:
+      noarch: generic
 
     about:
       home: http://www.x.org
