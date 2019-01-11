@@ -32,7 +32,6 @@ if [[ ${DEBUG_C} == yes ]]; then
 else
   _OPTIMIZED=yes
 fi
-_OPTIMIZED=no
 
 declare -a _dbg_opts
 if [[ ${DEBUG_PY} == yes ]]; then
