@@ -51,3 +51,11 @@ RUN yum install -y \
     make \
     unzip \
   && yum clean all
+
+WORKDIR /build_scripts
+COPY install_conda.sh /build_scripts
+RUN ./install_conda.sh
+
+ENV PATH="/opt/conda/bin:${PATH}"
+
+CMD [ "/bin/bash" ]
