@@ -26,3 +26,11 @@ RUN yum install -y \
   bzip2 \
   xorg-x11-server-Xvfb \
   && yum clean all
+
+WORKDIR /build_scripts
+COPY install_conda.sh /build_scripts
+RUN ./install_conda.sh
+
+ENV PATH="/opt/conda/bin:${PATH}"
+
+CMD [ "/bin/bash" ]
