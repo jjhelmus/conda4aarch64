@@ -1,0 +1,12 @@
+name: c4aarch64_installer
+version: 1.0.0
+
+channels:
+  - http://conda.anaconda.org/c4aarch64
+  
+license_file: ../LICENSE.txt
+
+specs:
+  - python
+  - conda
+  - pip
