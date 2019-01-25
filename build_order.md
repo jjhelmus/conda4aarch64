@@ -1,8 +1,12 @@
-# Build in compiler_builder container 
+The recipes in this repository were built in the following order:
+
+# Built in `compiler_builder` container 
+
 * crosstools-ng
 * ctng-compilers - gfortran test will fail, this is fine
 
-# Build in pkg_builder container
+# Built in `pkg_builder` container
+
 * ctng-compilers-activation - gfortran test will fail, this is fine
 * make
 * libtool
@@ -13,7 +17,6 @@
 * unzip
 * libffi
 * gettext
-
 * zlib
 * help2man
 * pkg-config
@@ -21,8 +24,6 @@
 * bzip2
 * xz
 * expat
-* gawk
-* texinfo
 * ca-certificates
 * openssl
 * wget
@@ -30,24 +31,22 @@
 * libedit
 * sqlite
 * readline
+* libx11-common-cos7-aarch64
+* libx11-cos7-aarch64
+* libx11-devel-cos7-aarch64
+* libxau-cos7-aarch64
+* libxcb-cos7-aarch64
+* xorg-x11-proto-devel-cos7-aarch64
 * tk
-* libssh2
-* curl
-* git
-* cmake
-* yaml
 * python
-* 
 * certifi
 * setuptools
 * wheel
 * pip
 * cython
-* ruamel_yaml
 * conda-env
-* pycosat
-* idna
 * six
+* idna
 * setuptools_scm
 * atomicwrites
 * attrs
@@ -66,26 +65,33 @@
 * pretend
 * pytz
 * pbr
-* mock
 * cookies
+* mock
 * ptyprocess
 * pexpect
-* hypothesis	--no-test, lot of requirements for tests
+* hypothesis : build with --no-test, lot of requirements for tests
 * crytography
 * pyopenssl
 * pysocks
 * urllib3
 * requests
 * responses
-* conda  --no-test b/c tests assume defaults + x86?
-
-* beautifulsoup
+* cake_nosystemcurl
+* libssh2
+* curl
+* beautifulsoup4
+* cmake
+* yaml
+* ruamel_yaml
+* git
+* pycosat
+* conda
 * filelock
 * glob2
 * markupsafe
 * jinja2
-* pkginfo
 * psutil
+* pkginfo
 * pyyaml
 * tqdm
 * patchelf
@@ -100,11 +106,9 @@
 * zstd
 * libarchive
 * python-libarchive-c
+* lief
 * conda-build
-
 * constructor
-
-* python-dateutil
 * clyent
 * ipython_genutils
 * decorator
@@ -113,53 +117,7 @@
 * jsonschema
 * jupyter_core
 * nbformat
-* anaconda-client
-
 * flex
 * bison
-
-### TODO ###
-
-
-
---- extra below here ---
-
-backcall
-parso
-jedi
-pickleshare
-pygments
-wcwidth
-prompt_toolkit
-pygments
-simplegeneric
-ipython
-
-tornado
-libsodium
-zeromq
-pyzmq
-jupyter_client
-ipykernel
-send2trash
-ptyprocess
-terminado
-prometheus_client
-mistune
-entrypoints
-webencodings
-bleach
-pandocfilters
-testpath
-defusedxml
-gmp
-pandoc
-nbconvert
-notebook
-
-nodejs
-jupyterlab_server
-jupyterlab
-
-openblas
-numpy
+* python-dateutil
+* anaconda-client
