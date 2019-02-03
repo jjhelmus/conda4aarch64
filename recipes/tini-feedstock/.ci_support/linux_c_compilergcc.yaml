@@ -1,0 +1,16 @@
+build_number_decrement:
+- '0'
+c_compiler:
+- gcc
+channel_sources:
+- conda-forge/label/gcc7,defaults
+channel_targets:
+- conda-forge gcc7
+docker_image:
+- condaforge/linux-anvil-comp7
+zip_keys:
+- - c_compiler
+  - channel_sources
+  - channel_targets
+  - docker_image
+  - build_number_decrement
