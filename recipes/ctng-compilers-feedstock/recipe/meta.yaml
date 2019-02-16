@@ -40,7 +40,7 @@ outputs:
       missing_dso_whitelist:
         - '*'
       runpath_whitelist:
-        - "x86_64-conda_cos6-linux-gnu/sysroot/lib/libpthread-2.12.2.so"
+        - "aarch64-conda_cos7-linux-gnu/sysroot/lib/libpthread-2.12.2.so"
     requirements:
       run:
         - {{ pin_subpackage("binutils_impl_" ~ ctng_target_platform, exact=True) }}
