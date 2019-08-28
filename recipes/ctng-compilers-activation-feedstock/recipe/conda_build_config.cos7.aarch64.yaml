@@ -28,4 +28,4 @@ ctng_gcc:
 ctng_binutils:
   - 2.29.1
 ctng_gcc_activation_build_num:
-  - 0
+  - 1
