@@ -84,12 +84,17 @@ function _tc_activation() {
 # When people are using conda-build, assume that adding rpath during build, and pointing at
 #    the host env's includes and libs is helpful default behavior
 if [ "${CONDA_BUILD:-0}" = "1" ]; then
-  CFLAGS_USED="@CFLAGS@ -I${PREFIX}/include -fdebug-prefix-map=\${SRC_DIR}=/usr/local/src/conda/\${PKG_NAME}-\${PKG_VERSION} -fdebug-prefix-map=\${PREFIX}=/usr/local/src/conda-prefix"
-  DEBUG_CFLAGS_USED="@DEBUG_CFLAGS@ -I${PREFIX}/include -fdebug-prefix-map=\${SRC_DIR}=/usr/local/src/conda/\${PKG_NAME}-\${PKG_VERSION} -fdebug-prefix-map=\${PREFIX}=/usr/local/src/conda-prefix"
+  CFLAGS_USED="@CFLAGS@ -I${PREFIX}/include -fdebug-prefix-map=${SRC_DIR}=/usr/local/src/conda/${PKG_NAME}-${PKG_VERSION} -fdebug-prefix-map=${PREFIX}=/usr/local/src/conda-prefix"
+  DEBUG_CFLAGS_USED="@DEBUG_CFLAGS@ -I${PREFIX}/include -fdebug-prefix-map=${SRC_DIR}=/usr/local/src/conda/${PKG_NAME}-${PKG_VERSION} -fdebug-prefix-map=${PREFIX}=/usr/local/src/conda-prefix"
   LDFLAGS_USED="@LDFLAGS@ -Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib"
+  CPPFLAGS_USED="@CPPFLAGS@ -I${PREFIX}/include"
+  DEBUG_CPPFLAGS_USED="@DEBUG_CPPFLAGS@ -I${PREFIX}/include"
+  CMAKE_PREFIX_PATH_USED="${CMAKE_PREFIX_PATH}:${PREFIX}:${BUILD_PREFIX}/${HOST}/sysroot/usr"
 else
   CFLAGS_USED="@CFLAGS@"
   DEBUG_CFLAGS_USED="@DEBUG_CFLAGS@"
+  CPPFLAGS_USED="@CPPFLAGS@"
+  DEBUG_CPPFLAGS_USED="@DEBUG_CPPFLAGS@"
   LDFLAGS_USED="@LDFLAGS@"
 fi
 
@@ -103,11 +108,12 @@ fi
 _tc_activation \
   deactivate host @CHOST@ @CHOST@- \
   cc cpp gcc gcc-ar gcc-nm gcc-ranlib \
-  "CPPFLAGS,${CPPFLAGS:-@CPPFLAGS@}" \
+  "CPPFLAGS,${CPPFLAGS:-${CPPFLAGS_USED}}" \
   "CFLAGS,${CFLAGS:-${CFLAGS_USED}}" \
   "LDFLAGS,${LDFLAGS:-${LDFLAGS_USED}}" \
-  "DEBUG_CPPFLAGS,${CPPFLAGS:-@DEBUG_CPPFLAGS@}" \
+  "DEBUG_CPPFLAGS,${DEBUG_CPPFLAGS:-${DEBUG_CPPFLAGS_USED}}" \
   "DEBUG_CFLAGS,${DEBUG_CFLAGS:-${DEBUG_CFLAGS_USED}}" \
+  "CMAKE_PREFIX_PATH,${CMAKE_PREFIX_PATH:-${CMAKE_PREFIX_PATH_USED}}" \
   "_CONDA_PYTHON_SYSCONFIGDATA_NAME,${_CONDA_PYTHON_SYSCONFIGDATA_NAME_USED}"
 
 if [ $? -ne 0 ]; then
